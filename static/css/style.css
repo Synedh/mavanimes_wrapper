@@ -1,0 +1,179 @@
+html, body, #root {
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+
+    --back-color: rgb(16, 23, 30);
+    --fore-color: rgb(255, 255, 255, 0.6);
+    --secondary-back-color: rgb(21, 32, 43);
+    --secondary-fore-color: rgb(255, 255, 255, 0.8);
+
+    --header-back-color: rgb(28, 41, 56);
+    --header-fore-color: rgb(255, 255, 255, 0.8);
+    --header-hover-back-color: var(--header-back-color);
+
+    --footer-back-color: rgb(28, 41, 56);
+    --footer-fore-color: rgb(255, 255, 255, 0.8);
+    --footer-hover-back-color: var(--header-back-color);
+
+    --button-back-color: rgb(29, 161, 242);
+    --button-fore-color: var(--secondary-fore-color);
+    --button-border-color: var(--button-back-color);
+    --button-hover-color: rgb(151, 227, 255);
+    --button-hover-back-color: rgb(0, 95, 209);
+    --button-hover-border-color: var(--button-hover-back-color);
+
+    --form-back-color: var(--secondary-back-color);
+    --form-fore-color: var(--secondary-fore-color);
+    --form-border-color: var(--secondary-back-color);
+    --input-back-color: var(--back-color);
+    --input-fore-color: var(--fore-color);
+    --input-border-color: var(--fore-color);
+    --input-invalid-color: var(--fore-color);
+
+    --card-back-color: var(--secondary-back-color);
+    --card-fore-color: var(--secondary-fore-color);
+    --card-border-color: var(--back-color);
+    --modal-close-color: var(--button-back-color);
+    --modal-close-hover-color: var(--secondary-back-color);
+    --modal-close-button-hover-color: var(--secondary-fore-color);
+}
+
+[type="checkbox"].modal + div .card .modal-close:hover::before,
+[type="checkbox"].modal + div .card .modal-close:focus::before {
+    color: var(--modal-close-button-hover-color);
+}
+
+a:hover {
+    color: inherit !important;
+}
+
+a:focus, a:visited, a:hover {
+    text-decoration: none !important;
+}
+
+.button-icon {
+    padding: 0 5px !important;
+    color: var(--button-back-color) !important;
+}
+
+.button-icon:hover {
+    cursor: pointer !important;
+}
+
+.button-icon.active {
+    color: var(--button-hover-color) !important;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+header, footer {
+    display: flex;
+    align-items: center;
+    border: none;
+    justify-content: space-between;
+}
+
+header div {
+    display: flex;
+    align-items: center;
+}
+
+header .logo {  
+    font-variant: small-caps;
+    font-weight: 600;
+    user-select: none;
+}
+
+header .logo .mav {
+    color: red;
+}
+header .logo .mav_wrapper {
+    text-transform: uppercase;
+    font-size: medium;
+}
+
+header .links {
+    margin-left: 20px;
+}
+
+@media screen and (min-width: 550px) {
+    header .logo_small {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    header .logo_large {
+        display: none;
+    }
+}
+
+header .search {
+    width: 30%;
+    min-width: 200px;
+}
+
+header .search form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: inherit;
+    border: none
+}
+
+header .search form svg {
+    color: var(--input-fore-color);
+}
+
+header .search form input {
+    width: 100%;    
+    background-color: inherit;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+
+    outline: none;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width: 550px) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+.container > * {
+    padding: 20px;
+}
+
+footer * {
+    font-size: 0.9rem !important;
+}
+
+footer p {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+footer .copy-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

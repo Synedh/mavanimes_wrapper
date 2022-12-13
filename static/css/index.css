@@ -1,0 +1,57 @@
+.weekly_episodes .date {
+    font-variant: small-caps;
+    font-size: x-large;
+    font-weight: bold;
+    color: var(--secondary-fore-color);
+}
+
+.episode:nth-child(odd) {
+    background: rgba(var(--secondary-back-color), 0.6);
+}
+
+.episode_snippet {
+    margin: 5px 0 5px 10px;
+    background: var(--secondary-back-color);
+    width: 400px;
+}
+
+.no_episode {
+    margin: 5px 0 5px 10px;
+}
+
+.episode_snippet:hover {
+    filter: brightness(120%);
+}
+
+.episode_snippet a {
+    display: flex;
+    color: inherit;
+}
+
+.episode_snippet .image_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: grey;
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+}
+
+.episode_snippet .infos {
+    margin: 5px 10px;
+}
+
+.episode_snippet .infos .name {
+    font-size: large;
+}
+
+.last_animes_list .last_anime_name {
+    padding: 5px 10px;
+}
+
+.last_animes_list .last_anime_name a {
+    display: block;
+    width: 100%;
+    color: inherit;
+}

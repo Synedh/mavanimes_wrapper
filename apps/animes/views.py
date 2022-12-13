@@ -12,8 +12,42 @@ def index(request):
                        .order_by('upload_date')
     )
 
+    episodes = [{
+        'name': 'foo',
+        'upload_date': datetime(2022, 12, 13),
+        'number': '0',
+        'anime': {
+            'slug': 'foo'
+        }
+    }, {
+        'name': 'bar',
+        'upload_date': datetime(2022, 12, 13),
+        'number': '0',
+        'anime': {
+            'slug': 'bar'
+        }
+    }, {
+        'name': 'test',
+        'upload_date': datetime(2022, 12, 12),
+        'number': '0',
+        'anime': {
+            'slug': 'test'
+        }
+    }]
+
+    episodes_days = {}
+    for i in range(7, 0, -1):
+        date = (seven_days_ago + timedelta(days=i)).date() 
+        episodes_days[date] = [
+            episode for episode in episodes
+            if episode['upload_date'].date() == date
+        ]
+
+    animes = ['foo', 'bar', 'test', 'toto']
     context = {
-        'episodes': episodes
+        'episodes_days': episodes_days,
+        'last_animes': animes
+        # 'last_animes': Anime.objects.order_by('-update_date').all()[:10]
     }
     return render(request, 'index.html', context)
 
