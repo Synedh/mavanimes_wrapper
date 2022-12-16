@@ -31,7 +31,7 @@
     <div class="last_animes_list">
     {% for anime in last_animes %}
         <div class="last_anime_name">
-            <a href="{% url 'animes:anime_detail' anime %}">
+            <a href="{% url 'animes:anime_detail' anime.slug %}">
                 {{ anime }}
             </a>
         </div>
@@ -41,4 +41,8 @@
     {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer.html" %}
 {% endblock %}

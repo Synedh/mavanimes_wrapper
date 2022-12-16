@@ -8,46 +8,21 @@ from .models import Anime, Episode
 def index(request):
     seven_days_ago = timezone.make_aware(datetime(*(timezone.now().date() - timedelta(days=7)).timetuple()[:6]))
     episodes = (
-        Episode.objects.filter(upload_date__lte=seven_days_ago)
+        Episode.objects.filter(upload_date__gte=seven_days_ago)
                        .order_by('upload_date')
     )
-
-    episodes = [{
-        'name': 'foo',
-        'upload_date': datetime(2022, 12, 13),
-        'number': '0',
-        'anime': {
-            'slug': 'foo'
-        }
-    }, {
-        'name': 'bar',
-        'upload_date': datetime(2022, 12, 13),
-        'number': '0',
-        'anime': {
-            'slug': 'bar'
-        }
-    }, {
-        'name': 'test',
-        'upload_date': datetime(2022, 12, 12),
-        'number': '0',
-        'anime': {
-            'slug': 'test'
-        }
-    }]
 
     episodes_days = {}
     for i in range(7, 0, -1):
         date = (seven_days_ago + timedelta(days=i)).date() 
-        episodes_days[date] = [
+        episodes_days[date] = sorted([
             episode for episode in episodes
-            if episode['upload_date'].date() == date
-        ]
+            if episode.upload_date.date() == date
+        ], key=lambda episode: episode.upload_date, reverse=True)
 
-    animes = ['foo', 'bar', 'test', 'toto']
     context = {
         'episodes_days': episodes_days,
-        'last_animes': animes
-        # 'last_animes': Anime.objects.order_by('-update_date').all()[:10]
+        'last_animes': Anime.objects.order_by('-update_date').all()[:10]
     }
     return render(request, 'index.html', context)
 
@@ -67,10 +42,19 @@ def anime(request, slug):
     }
     return render(request, 'animes/anime_detail.html', context)
 
-def episode(request, slug, number):
-    episode = get_object_or_404(Episode, anime__slug=slug, number=number)
+def episode(request, slug, value):
+    episode = get_object_or_404(Episode, anime__slug=slug, value=value)
+    episode_index = list(episode.anime.episodes.all()).index(episode)
+
+    previous_value, next_value = None, None
+    if episode_index > 0:
+        previous_value = episode.anime.episodes.all()[episode_index - 1].value
+    if episode_index < episode.anime.episodes.count() - 1:
+        next_value = episode.anime.episodes.all()[episode_index + 1].value
 
     context = {
-        'episode': episode
+        'episode': episode,
+        'previous_value': previous_value,
+        'next_value': next_value
     }
     return render(request, 'animes/episode.html', context)

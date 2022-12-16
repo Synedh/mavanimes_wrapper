@@ -1,0 +1,33 @@
+{% load split %}
+
+<div class="anime_snippet">
+    <a href="{% url 'animes:anime_detail' anime.slug %}">
+        <div class="image_container">
+            {% if anime.image %}
+            <img src="{{ anime.small_image }}" alt="{{ anime.name }}" />
+            {% else %}
+            <svg width="64" height="64" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21q-.825 0-1.413-.587Q3 19.825 3 19V5q0-.825.587-1.413Q4.175 3 5 3h14q.825 0 1.413.587Q21 4.175 21 5v14q0 .825-.587 1.413Q19.825 21 19 21Zm0-2h14V5H5v14Zm1-2h12l-3.75-5l-3 4L9 13Zm-1 2V5v14Z"/></svg>
+            {% endif %}
+        </div>
+        <div class="infos">
+            <div class="name">
+                {{ anime.name }}
+            </div>
+            <div class="description">
+                <div class="episode">
+                    <span>
+                        {{ anime.episodes.all|length }}
+                    </span>
+                    episode{{ anime.episodes.all|length|pluralize:"s" }}
+                </div>
+                <div class="versions">
+                {% for version in anime.versions|split:"," %}
+                    <div>
+                        {{ version }}
+                    </div>
+                {% endfor  %}
+                </div>
+            </div>
+        </div>
+    </a>
+</div>

@@ -1,5 +1,72 @@
 {% extends "overall.html" %}
 
-{% block content %}
+{% block title %}{{ episode.name }} - {{ block.super }}{% endblock %}
 
+{% block head %}
+<link href="/static/css/episode.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="episode">
+    <div class="episode_name">
+        {{ episode.name }}
+    </div>
+    <div class="video_reader">
+        <div class="tabs">
+        {% for video_url in episode.video_urls.all %}
+            <div class="tab_button" onclick="selectVideo({{ forloop.counter0 }})">
+                {{ video_url.source|upper }}
+            </div>
+        {% endfor %}
+        </div>
+        <div class="videos">
+        {% for video_url in episode.video_urls.all %}
+            <div id="video_{{ video_url.source }}" class="video">
+                <iframe src="{{ video_url.url }}" title="{{ video_url.source }} video player" frameborder="0" allowfullscreen></iframe>
+                {% comment %} <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video player" frameborder="0" allowfullscreen></iframe> {% endcomment %}
+            </div>
+        {% endfor %}
+        </div>
+        <div class="controls">
+            {% if previous_value %}
+            <a class="previous" href="{% url 'animes:episode' slug=episode.anime.slug value=previous_value %}">
+                << Précédent
+            </a>
+            {% else %}
+            <div></div>
+            {% endif %}
+            <a class="anime" href="{% url 'animes:anime_detail' episode.anime.slug %}">
+                Tous les épisodes
+            </a>
+            {% if next_value %}
+            <a class="next" href="{% url 'animes:episode' slug=episode.anime.slug value=next_value %}">
+                Suivant >>
+            </a>
+            {% else %}
+            <div></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script lang="js">
+    const tabs = document.querySelectorAll('.tab_button');
+    const videos = document.querySelectorAll('.video');
+
+    function selectVideo(id) {
+        for (const [i, video] of videos.entries()) {
+            if (i === id) {
+                video.classList.remove('hidden');
+                tabs[i].classList.add('selected');
+            } else {
+                video.classList.add('hidden')
+                tabs[i].classList.remove('selected');
+            }
+        }
+    }
+
+    selectVideo(0);
+</script>
 {% endblock %}

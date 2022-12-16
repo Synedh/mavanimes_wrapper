@@ -2,8 +2,11 @@ from django.core.management.base import BaseCommand
 
 import re
 import json
+import logging
 import requests
 from html.parser import HTMLParser
+
+logger = logging.getLogger(__name__)
 
 class HTMLCleaner(HTMLParser):
     text = ''
@@ -55,13 +58,13 @@ def get_anime_url_list():
 
 def get_animes():
     anime_url_list = get_anime_url_list()
-    for anime_url in anime_url_list[5:10]:
+    for anime_url in anime_url_list[:1]:
         response = requests.get(anime_url)
         anime = {
             **html_to_anime(response.text),
             'mav_url': anime_url
         }
-        print(json.dumps(anime, indent=4))
+        logger(json.dumps(anime, indent=4))
 
 
 class Command(BaseCommand):

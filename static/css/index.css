@@ -1,3 +1,7 @@
+.weekly_episodes {
+    padding: 20px;
+}
+
 .weekly_episodes .date {
     font-variant: small-caps;
     font-size: x-large;
@@ -5,45 +9,75 @@
     color: var(--secondary-fore-color);
 }
 
+.no_episode {
+    margin: 5px 0 5px 10px;
+}
+
 .episode:nth-child(odd) {
     background: rgba(var(--secondary-back-color), 0.6);
 }
 
-.episode_snippet {
+.episode_snippet,
+.anime_snippet {
     margin: 5px 0 5px 10px;
     background: var(--secondary-back-color);
     width: 400px;
 }
 
-.no_episode {
-    margin: 5px 0 5px 10px;
-}
-
-.episode_snippet:hover {
+.episode_snippet:hover,
+.anime_snippet:hover {
     filter: brightness(120%);
 }
 
-.episode_snippet a {
+.episode_snippet a,
+.anime_snippet a {
     display: flex;
     color: inherit;
 }
 
-.episode_snippet .image_container {
+.episode_snippet .image_container,
+.anime_snippet .image_container {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: grey;
-    width: 100px;
-    height: 75px;
+    width: 110px;
+    max-width: 110px;
+    height: 82px;
     object-fit: cover;
 }
 
-.episode_snippet .infos {
-    margin: 5px 10px;
+.episode_snippet .image_container img,
+.anime_snippet .image_container img {
+    width: 110px;
+    max-width: 110px;
+    height: 82px;
+    object-fit: cover;
 }
 
-.episode_snippet .infos .name {
-    font-size: large;
+.episode_snippet .infos,
+.anime_snippet .infos {
+    margin: 5px 10px;
+    width: 100%;
+}
+
+.episode_snippet .infos .name,
+.anime_snippet .infos .name {
+    color: var(--secondary-fore-color);
+    height: 48px;
+}
+
+.episode_snippet .infos .description,
+.anime_snippet .infos .description {
+    display: flex;
+    justify-content: space-between;
+}
+
+.last_animes .section_name {
+    font-variant: small-caps;
+    font-size: x-large;
+    font-weight: bold;
+    color: var(--secondary-fore-color);
 }
 
 .last_animes_list .last_anime_name {
@@ -53,5 +87,4 @@
 .last_animes_list .last_anime_name a {
     display: block;
     width: 100%;
-    color: inherit;
 }
