@@ -10,6 +10,7 @@ from apps.animes.models import Anime, Episode, VideoURL
 
 logger = logging.getLogger(__name__)
 
+
 def videos_of_ep(url):
     response = requests.get(url)
     if not response.ok:
@@ -40,22 +41,24 @@ def save_ep(episode_dict):
     anime, _ = Anime.objects.get_or_create(name=episode_dict['anime'])
     video_urls = episode_dict['video_urls']
     del episode_dict['video_urls']
-
     episode_dict['anime'] = anime
-    episode, _ = Episode.objects.update_or_create(
+
+    episode, new_episode = Episode.objects.update_or_create(
         name=episode_dict['name'], anime=anime.id,
-        defaults={**episode_dict, 'upload_date': timezone.now()}
+        defaults={**episode_dict}
     )
-    episode.video_urls.set([VideoURL.objects.get_or_create(
+    video_urls = [VideoURL.objects.get_or_create(
         url=url,
         source=url.split('.')[0].split('/')[-1],
         episode=episode
-    )[0] for url in video_urls])
-    episode.save()
+    ) for url in video_urls]
 
+    if new_episode or any(new_url for _, new_url in video_urls):
+        logger.info(f'{"New" if new_episode else "Updated"} episode {episode.name}')
+        episode.video_urls.set(url for url, _ in video_urls)
+        episode.upload_date = timezone.now()
+        episode.save()
     return episode
-
-
 
 def get_last_eps():
     response = requests.get('http://www.mavanimes.co/')
