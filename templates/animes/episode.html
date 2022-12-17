@@ -8,9 +8,9 @@
 
 {% block content %}
 <div class="episode">
-    <div class="episode_name">
+    <h1>
         {{ episode.name }}
-    </div>
+    </h1>
     <div class="video_reader">
         <div class="tabs">
         {% for video_url in episode.video_urls.all %}

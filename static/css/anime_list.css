@@ -4,10 +4,6 @@
 }
 
 .head_box .title {
-    font-variant: small-caps;
-    font-size: x-large;
-    font-weight: bold;
-    color: var(--secondary-fore-color);
     margin-right: 30px;
 }
 

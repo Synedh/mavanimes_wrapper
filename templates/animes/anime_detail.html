@@ -1,5 +1,81 @@
 {% extends "overall.html" %}
+{% load split %}
+
+{% block title %}{{ anime.name }} - {{ block.super }}{% endblock %}
+
+{% block head %}
+<link href="/static/css/anime_detail.css" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
+<div class="anime">
+    <h1 class="anime_name">
+        {{ anime.name }}
+    </h1>
+    <div class="content">
+        <div class="anime_detail">
+            <img src="{{ anime.image }}">
+            <ul>
+                <li>
+                    Version{{ anime.versions|split:","|length|pluralize:"s" }}: {{ anime.versions }}
+                </li>
+                <li>
+                    Saison{{ saisons|pluralize:"s" }}: {{ saisons }}
+                </li>
+                <li>
+                    Episode{{ anime.episodes.count|pluralize:"s" }}: {{ anime.episodes.count }}
+                </li>
+            </ul>
+        </div>
+        {% for version, saisons in versions.items %}
+        <div class="episodes_lists">
+            <h1>
+                Episodes
+            </h1>
+        <div class="versions">
+            <div class="version">
+                {{ version }}
+            </div>
+            <div class="saisons">
+            {% for saison, episodes in saisons.items %}
+                {% if saisons|length > 1 %}
+                <div class="saison" onclick="displaySeason({{ forloop.counter0 }})">
+                    <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
+                    Saison {{ saison }}
+                </div>
+                {% endif %}
+                <ul class="episodes {% if saisons|length > 1 %}toggled_off{% endif %}">
+                {% for episode in episodes %}
+                    <li class="episode">
+                        <a href="{% url 'animes:episode' slug=anime.slug value=episode.value %}    ">
+                            Episode {{ episode.number }}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
 
+{% block footer %}
+<script>
+    const saisons = document.querySelectorAll('.saison');
+    const episodes = document.querySelectorAll('.episodes');
+
+    function displaySeason(id) {
+        for (const [i, episode_list] of episodes.entries()) {
+            if (i === id) {
+                saisons[i].classList.toggle('selected');
+                episode_list.classList.toggle('toggled_off');
+            } else {
+                saisons[i].classList.remove('selected');
+                episode_list.classList.add('toggled_off');
+            }
+        }
+    }
+</script>
 {% endblock %}

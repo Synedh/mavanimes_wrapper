@@ -6,14 +6,6 @@
     max-width: 900px;
 }
 
-.episode_name {
-    font-size: x-large;
-    font-variant: small-caps;
-    font-weight: bold;
-    color: var(--secondary-fore-color);
-    text-align: center;
-}
-
 .video_reader {
     margin-top: 20px;
     width: 100%;

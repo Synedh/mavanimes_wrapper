@@ -1,0 +1,59 @@
+.content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 15em;
+}
+
+li {
+    list-style: none;
+}
+
+.anime_detail {
+    margin-right: 20px;
+}
+
+.version {
+    width: 100%;
+    padding: 5px 10px;
+    background-color: var(--header-back-color);
+}
+
+.saison {
+    width: 100%;
+    padding: 5px 15px 5px 5px;
+    background-color: var(--secondary-back-color);
+
+    display: flex;
+}
+
+.saison svg {
+    rotate: 0deg;
+    transition: all 0.2s linear;
+}
+
+.saison.selected svg {
+    rotate: 90deg;
+    transition: all 0.2s linear;
+}
+
+.saison:hover {
+    cursor: pointer;
+}
+
+.episode {
+    width: 100%;
+    padding: 5px 10px;
+}
+
+.episodes {
+    margin: 0;
+    max-height: 100vh;
+    transition: all 0.4s linear;
+}
+
+.toggled_off {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.4s linear;
+}

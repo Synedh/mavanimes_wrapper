@@ -82,6 +82,15 @@ code {
         monospace;
 }
 
+h1 {
+    margin: calc(0.5 * var(--universal-margin)) var(--universal-margin);
+    font-variant: small-caps;
+    font-size: x-large;
+    font-weight: bold;
+    color: var(--secondary-fore-color);
+    text-align: center;
+}
+
 header, footer {
     display: flex;
     align-items: center;

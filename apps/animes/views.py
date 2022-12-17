@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 
 from datetime import datetime, timedelta
+from collections import defaultdict
 
 from .models import Anime, Episode
 
@@ -37,8 +38,18 @@ def anime_list(request):
 def anime(request, slug):
     anime = get_object_or_404(Anime, slug=slug)
 
+    versions = {version: defaultdict(list) for version in anime.versions.split(',')}
+
+    for episode in anime.episodes.all():
+        versions[episode.version][episode.saison].append(episode)
+    
+    for saisons in versions.values():
+        saisons.default_factory = None # Disable defaultdict tools to be able to iterate in template 
+
     context = {
-        'anime': anime
+        'anime': anime,
+        'saisons': anime.episodes.latest('saison').saison,
+        'versions': versions
     }
     return render(request, 'animes/anime_detail.html', context)
 
