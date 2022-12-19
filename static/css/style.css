@@ -107,7 +107,7 @@ header div {
     align-items: center;
 }
 
-header .logo {  
+header .logo {
     font-variant: small-caps;
     font-weight: 600;
     user-select: none;
@@ -155,7 +155,7 @@ header .search form svg {
 }
 
 header .search form input {
-    width: 100%;    
+    width: 100%;
     background-color: inherit;
     border-top: none;
     border-left: none;

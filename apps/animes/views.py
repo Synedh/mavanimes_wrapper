@@ -15,7 +15,7 @@ def index(request):
 
     episodes_days = {}
     for i in range(7, 0, -1):
-        date = (seven_days_ago + timedelta(days=i)).date() 
+        date = (seven_days_ago + timedelta(days=i)).date()
         episodes_days[date] = sorted([
             episode for episode in episodes
             if episode.upload_date.date() == date
@@ -37,14 +37,14 @@ def anime_list(request):
 
 def anime(request, slug):
     anime = get_object_or_404(Anime, slug=slug)
-
     versions = {version: defaultdict(list) for version in anime.versions.split(',')}
 
     for episode in anime.episodes.all():
         versions[episode.version][episode.saison].append(episode)
-    
+
     for saisons in versions.values():
-        saisons.default_factory = None # Disable defaultdict tools to be able to iterate in template 
+        # Disable defaultdict tools to be able to iterate in template
+        saisons.default_factory = None
 
     context = {
         'anime': anime,

@@ -21,9 +21,10 @@ def videos_of_ep(url):
 
 def html_to_ep(ep_html):
     ep_name = re.search(r'<p>(.*?)<\/p>', ep_html).group(1)
+    url = re.search(r'<a href="(.*?)">', ep_html).group(1)
+
     logger.info(ep_name)
     episode = ep_title_parser(ep_name)
-    url = re.search(r'<a href="(.*?)">', ep_html).group(1)
 
     return {
         'anime': episode['anime'],
