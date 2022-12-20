@@ -38,9 +38,10 @@
     }
 
     function filterAnimes(value) {
+        const lowerValue = value.toLocaleLowerCase();
         for (const animeElement of animes) {
-            const animeName = animeElement.children[0].children[1].children[0].innerHTML;
-            if (animeName.toLocaleLowerCase().includes(value)) {
+            const animeName = animeElement.children[1].children[1].children[0].innerHTML;
+            if (animeName.toLocaleLowerCase().includes(lowerValue)) {
                 animeElement.classList.remove('hidden');
             } else {
                 animeElement.classList.add('hidden');

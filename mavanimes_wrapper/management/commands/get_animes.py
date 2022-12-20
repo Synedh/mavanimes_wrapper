@@ -64,7 +64,7 @@ def get_animes():
             **html_to_anime(response.text),
             'mav_url': anime_url
         }
-        logger(json.dumps(anime, indent=4))
+        logger.info(json.dumps(anime, indent=4))
 
 
 class Command(BaseCommand):

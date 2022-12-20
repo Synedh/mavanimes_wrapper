@@ -48,15 +48,14 @@ def save_ep(episode_dict):
         name=episode_dict['name'], anime=anime.id,
         defaults={**episode_dict}
     )
-    video_urls = [VideoURL.objects.get_or_create(
+    videos = [VideoURL.objects.get_or_create(
         url=url,
         source=url.split('.')[0].split('/')[-1],
         episode=episode
     ) for url in video_urls]
 
-    if new_episode or any(new_url for _, new_url in video_urls):
+    if new_episode or any(new_url for _, new_url in videos):
         logger.info(f'{"New" if new_episode else "Updated"} episode {episode.name}')
-        episode.video_urls.set(url for url, _ in video_urls)
         episode.upload_date = timezone.now()
         episode.save()
     return episode

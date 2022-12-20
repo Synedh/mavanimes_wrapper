@@ -1,4 +1,9 @@
 <div class="episode_snippet">
+    {% if user.is_superuser %}
+    <a href="{% url 'admin:animes_episode_change' episode.id %}" class="to_admin" title="Ouvrir dans l'admin">
+        @
+    </a>
+    {% endif %}
     <a href="{% url 'animes:episode' slug=episode.anime.slug value=episode.value %}">
         <div class="image_container">
             {% if episode.image %}

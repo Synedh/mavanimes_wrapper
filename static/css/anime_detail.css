@@ -13,6 +13,12 @@ li {
     margin-right: 20px;
 }
 
+.episodes_container {
+    width: calc(100% + 10px);
+    max-height: calc(100vh - 150px);
+    overflow: hidden auto;
+}
+
 .version {
     width: 100%;
     padding: 5px 10px;

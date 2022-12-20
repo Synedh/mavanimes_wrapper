@@ -2,7 +2,7 @@ import re
 
 def ep_title_parser(ep_name):
     saison = next(iter(re.findall(r'saisons?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
-    ep_name = re.sub(r'(\(\s*)?saisons?\s?(\d+)(\s*\))?', '', ep_name, flags=re.IGNORECASE)
+    ep_name = re.sub(r'(\(\s*)?saisons?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
 
     version = re.search(r'\W(V[A-Z]+)', ep_name).group(1)
     ep_name = re.sub(version, '', ep_name)

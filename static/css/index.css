@@ -19,9 +19,24 @@
 
 .episode_snippet,
 .anime_snippet {
+    position: relative;
     margin: 5px 0 5px 10px;
     background: var(--secondary-back-color);
     width: 400px;
+}
+
+.episode_snippet .to_admin,
+.anime_snippet .to_admin {
+    position: absolute;
+    z-index: 90;
+    top: 0;
+    right: 0;
+
+    padding: 0 4px;
+    border-radius: var(--universal-border-radius);
+
+    background-color: #AAAA;
+    font-size: small;
 }
 
 .episode_snippet:hover,

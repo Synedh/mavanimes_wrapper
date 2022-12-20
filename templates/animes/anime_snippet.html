@@ -1,6 +1,11 @@
 {% load split %}
 
 <div class="anime_snippet">
+    {% if user.is_superuser %}
+    <a href="{% url 'admin:animes_anime_change' anime.id %}" class="to_admin" title="Ouvrir dans l'admin">
+        @
+    </a>
+    {% endif %}
     <a href="{% url 'animes:anime_detail' anime.slug %}">
         <div class="image_container">
             {% if anime.image %}
