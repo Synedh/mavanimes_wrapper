@@ -14,7 +14,7 @@
     </h1>
     <div class="content">
         <div class="anime_detail">
-            <img src="{{ anime.image }}">
+            <img src="{{ anime.image }}" />
             <ul>
                 <li>
                     Version{{ anime.versions|split:","|length|pluralize:"s" }}: {{ anime.versions }}
@@ -48,8 +48,12 @@
                         <ul class="episodes {% if saison != saisons %}toggled_off{% endif %}">
                         {% for episode in episodes %}
                             <li class="episode">
-                                <a href="{% url 'animes:episode' slug=anime.slug value=episode.value %}    ">
+                                <a href="{% url 'animes:episode' slug=anime.slug value=episode.value %}">
+                                    {% if episode.number == -1 %}
+                                    Film
+                                    {% else %}
                                     Episode {{ episode.number }}
+                                    {% endif %}
                                 </a>
                             </li>
                         {% endfor %}

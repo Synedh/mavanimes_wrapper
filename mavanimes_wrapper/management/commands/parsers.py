@@ -4,11 +4,13 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-def get_page(url):
+def get_page(url, allow_to_fail=False):
     response = requests.get(url)
-    if not response.ok:
+    if not response.ok and not allow_to_fail:
         logger.error(f'HTTP Error {response.status_code} while requesting {response.url}: {response.text}')
         exit(1)
+    elif not response.ok:
+        return None
     return response.text
 
 
@@ -16,8 +18,9 @@ def ep_title_parser(ep_name):
     saison = next(iter(re.findall(r'saisons?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
     ep_name = re.sub(r'(\(\s*)?saisons?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
 
-    version = re.search(r'\W(V[A-Z]+)', ep_name).group(1)
-    ep_name = re.sub(version, '', ep_name)
+    version = next(iter(re.findall(r'\W((?:VF)|(?:VOSTFR))', ep_name, re.IGNORECASE)), None)
+    if version:
+        ep_name = re.sub(version, '', ep_name)
 
     try:
         number = re.search(r'^.*?(\d+)\D*$', ep_name).group(1)
@@ -37,4 +40,5 @@ def ep_title_parser(ep_name):
     }
 
 def videos_of_ep(url):
-    return re.findall(r'iframe\s+src="(.*?)"', get_page(url))
+    episode_html = get_page(url, allow_to_fail=True)
+    return re.findall(r'iframe\s+src="(.*?)"', episode_html) if episode_html else []

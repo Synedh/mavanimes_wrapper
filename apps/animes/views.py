@@ -13,13 +13,13 @@ def index(request):
                        .order_by('pub_date')
     )
 
-    episodes_days = {}
+    episodes_days = []
     for i in range(7, 0, -1):
         date = (seven_days_ago + timedelta(days=i)).date()
-        episodes_days[date] = sorted([
-            episode for episode in episodes
+        episodes = sorted([episode for episode in episodes
             if episode.pub_date.date() == date
         ], key=lambda episode: episode.pub_date, reverse=True)
+        episodes_days.append([date, episodes])
 
     context = {
         'episodes_days': episodes_days,

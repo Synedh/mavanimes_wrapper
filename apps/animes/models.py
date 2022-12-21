@@ -3,6 +3,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
+from datetime import datetime
+
 class Tag(models.Model):
     name = models.CharField(max_length=1024)
 
@@ -21,7 +23,7 @@ class Anime(models.Model):
     update_date = models.DateTimeField(auto_now_add=True)
     mav_url = models.URLField(blank=True, null=True, default='')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_absolute_url(self) -> str:
@@ -44,7 +46,7 @@ class Episode(models.Model):
     number = models.IntegerField(blank=True, null=True, default=None)
     saison = models.IntegerField(blank=True, null=True, default=1)
     version = models.CharField(max_length=128, blank=True, null=True, default='VOSTFR')
-    pub_date = models.DateTimeField()
+    pub_date = models.DateTimeField(blank=True, null=True, default=datetime(1970, 1, 1, tzinfo=timezone.get_current_timezone()))
     mav_url = models.URLField()
 
     def save(self, *args, **kwargs):

@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="weekly_episodes">
-{% for date, episodes in episodes_days.items %}
+{% for date, episodes in episodes_days %}
     <div class="day">
         <div class="date">
             {{ date|date:"l d F"|title }}
@@ -22,23 +22,22 @@
         {% endfor %}
     </div>
 {% endfor %}
-</div>
-
-<div class="last_animes">
-    <div class="section_name">
-        Derniers animes
-    </div>
-    <div class="last_animes_list">
-    {% for anime in last_animes %}
-        <div class="last_anime_name">
-            <a href="{% url 'animes:anime_detail' anime.slug %}">
-                {{ anime }}
-            </a>
+    <div class="last_animes">
+        <div class="section_name">
+            Derniers animes
         </div>
-        {% if not forloop.last %}
-        <hr />
-        {% endif %}
-    {% endfor %}
+        <div class="last_animes_list">
+        {% for anime in last_animes %}
+            <div class="last_anime_name">
+                <a href="{% url 'animes:anime_detail' anime.slug %}">
+                    {{ anime }}
+                </a>
+            </div>
+            {% if not forloop.last %}
+            <hr />
+            {% endif %}
+        {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

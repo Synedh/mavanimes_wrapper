@@ -1,5 +1,11 @@
 .weekly_episodes {
-    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.weekly_episodes > * {
+    padding: 10px;
 }
 
 .weekly_episodes .date {
@@ -53,6 +59,7 @@
 .episode_snippet .image_container,
 .anime_snippet .image_container {
     display: flex;
+    flex: 1 0 auto;
     justify-content: center;
     align-items: center;
     background-color: grey;
