@@ -1,4 +1,16 @@
+import logging
 import re
+import requests
+
+logger = logging.getLogger(__name__)
+
+def get_page(url):
+    response = requests.get(url)
+    if not response.ok:
+        logger.error(f'HTTP Error {response.status_code} while requesting {response.url}: {response.text}')
+        exit(1)
+    return response.text
+
 
 def ep_title_parser(ep_name):
     saison = next(iter(re.findall(r'saisons?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
@@ -23,3 +35,6 @@ def ep_title_parser(ep_name):
         'number': int(number),
         'version': version
     }
+
+def videos_of_ep(url):
+    return re.findall(r'iframe\s+src="(.*?)"', get_page(url))

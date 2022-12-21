@@ -9,8 +9,8 @@ from .models import Anime, Episode
 def index(request):
     seven_days_ago = timezone.make_aware(datetime(*(timezone.now().date() - timedelta(days=7)).timetuple()[:6]))
     episodes = (
-        Episode.objects.filter(upload_date__gte=seven_days_ago)
-                       .order_by('upload_date')
+        Episode.objects.filter(pub_date__gte=seven_days_ago)
+                       .order_by('pub_date')
     )
 
     episodes_days = {}
@@ -18,8 +18,8 @@ def index(request):
         date = (seven_days_ago + timedelta(days=i)).date()
         episodes_days[date] = sorted([
             episode for episode in episodes
-            if episode.upload_date.date() == date
-        ], key=lambda episode: episode.upload_date, reverse=True)
+            if episode.pub_date.date() == date
+        ], key=lambda episode: episode.pub_date, reverse=True)
 
     context = {
         'episodes_days': episodes_days,

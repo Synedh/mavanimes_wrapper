@@ -5,7 +5,7 @@ from .models import Tag, Anime, Episode, VideoURL
 class EpisodeInline(admin.StackedInline):
     model = Episode
     extra = 0
-    fields = ('name', 'number', 'saison', 'version', 'upload_date', 'mav_url')
+    fields = ('name', 'number', 'saison', 'version', 'pub_date', 'mav_url')
 
 class VideoURLInline(admin.TabularInline):
     model = VideoURL
@@ -26,7 +26,7 @@ class EpisodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'saison', 'number', 'version')
     search_fields = ('name',)
     ordering = ('name',)
-    fields = ('name', 'anime', 'number', 'saison', 'version', 'upload_date', 'image', 'small_image', 'mav_url')
+    fields = ('name', 'anime', 'number', 'saison', 'version', 'pub_date', 'mav_url')
     inlines = [VideoURLInline]
 
 
