@@ -29,7 +29,11 @@ DEBUG = os.getenv('PROD') != 'True'
 CSRF_COOKIE_SECURE = os.getenv('PROD') == 'True'
 SESSION_COOKIE_SECURE = os.getenv('PROD') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'dev.synedh.fr'
+]
 
 
 # Application definition
