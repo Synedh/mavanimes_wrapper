@@ -18,14 +18,12 @@
             </div>
             <div class="description">
                 <div class="episode">
-                {% if episode.number == -1 %}
-                    FILM
-                {% elif episode.number > 0 %}
-                    Episode
+                    {{ episode.type|title }}
+                    {% if episode.number %}
                     <span>
-                        {{ episode.number }}
+                        {{ episode.number|floatformat }}
                     </span>
-                {% endif %}
+                    {% endif %}
                 </div>
                 {% if episode.saison > 1 %}
                 <div class="saison">

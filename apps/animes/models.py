@@ -11,6 +11,11 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
+
 
 class Anime(models.Model):
     name = models.CharField(max_length=1024, unique=True)
@@ -40,10 +45,17 @@ class Anime(models.Model):
 
 
 class Episode(models.Model):
+    class Type(models.TextChoices):
+        EPISODE = 'EPISODE'
+        FILM = 'FILM'
+        OAV = 'OAV'
+        SPECIAL = 'SPECIAL' 
+
     name = models.CharField(max_length=1024)
     value = models.CharField(max_length=128)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, related_name='episodes')
-    number = models.IntegerField(blank=True, null=True, default=None)
+    type = models.CharField(max_length=7, choices=Type.choices, blank=True, null=True, default=Type.EPISODE)
+    number = models.FloatField(blank=True, null=True, default=None)
     saison = models.IntegerField(blank=True, null=True, default=1)
     version = models.CharField(max_length=128, blank=True, null=True, default='VOSTFR')
     pub_date = models.DateTimeField(blank=True, null=True, default=datetime(1970, 1, 1, tzinfo=timezone.get_current_timezone()))
@@ -53,7 +65,7 @@ class Episode(models.Model):
         anime_versions = set(self.anime.versions.split(',')) | set([self.version])
         self.anime.versions = ','.join(sorted(v for v in list(anime_versions) if v))
         self.anime.save()
-        self.value = f'{self.saison}x{self.number}'
+        self.value = f'{self.type.lower()}x{self.saison}x{self.number:g}'
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self) -> str:

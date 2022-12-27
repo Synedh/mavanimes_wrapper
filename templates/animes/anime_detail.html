@@ -15,6 +15,13 @@
     <div class="content">
         <div class="anime_detail">
             <img src="{{ anime.image }}" />
+            <div class="tags">
+            {% for tag in anime.tags.all %}
+                <div class="tag shadowed rounded">
+                    <span>{{ tag }}</span>
+                </div>
+            {% endfor %}
+            </div>
             <ul>
                 <li>
                     Version{{ anime.versions|split:","|length|pluralize:"s" }}: {{ anime.versions }}
@@ -26,6 +33,7 @@
                     Episode{{ anime.episodes.count|pluralize:"s" }}: {{ anime.episodes.count }}
                 </li>
             </ul>
+            <p class="description">{{ anime.description|linebreaks }}</p>
         </div>
         <div class="episodes_lists">
             <h1>
@@ -39,21 +47,17 @@
                     </div>
                     <div class="saisons">
                     {% for saison, episodes in saisons_list.items %}
-                        {% if saisons > 1 %}
-                        <div class="saison {% if saison == saisons %}selected{% endif %}" onclick="displaySeason({{ forloop.counter0 }})">
+                        {% if saisons_list|length > 1 %}
+                        <div class="saison {% if forloop.first %}selected{% endif %}" onclick="displaySeason({{ forloop.counter0 }})">
                             <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
-                            Saison {{ saison }}
+                            {{ saison }}
                         </div>
                         {% endif %}
-                        <ul class="episodes {% if saison != saisons %}toggled_off{% endif %}">
+                        <ul class="episodes {% if not forloop.first %}toggled_off{% endif %}">
                         {% for episode in episodes %}
                             <li class="episode">
                                 <a href="{% url 'animes:episode' slug=anime.slug value=episode.value %}">
-                                    {% if episode.number == -1 %}
-                                    Film
-                                    {% else %}
-                                    Episode {{ episode.number }}
-                                    {% endif %}
+                                    {{ episode.type|title }}{% if episode.number %} {{ episode.number|floatformat }}{% endif %}
                                 </a>
                             </li>
                         {% endfor %}
@@ -83,6 +87,18 @@
                 episode_list.classList.add('toggled_off');
             }
         }
+    }
+
+    function stringToColour (str) {
+        const hash = [...str].reduce((hash, char) => char.charCodeAt(0) + (hash << 5) - hash, 0);
+        const hashToColor = i => (hash >> (i * 8)) & 0xFF;
+        const red = ('00' + hashToColor(0).toString(16)).substr(-2);
+        const green = ('00' + hashToColor(1).toString(16)).substr(-2);
+        const blue = ('00' + hashToColor(2).toString(16)).substr(-2);
+        return `#${red}${green}${blue}`
+    }
+    for (const tag of document.querySelectorAll('.tag')) {
+        tag.style.backgroundColor = stringToColour(tag.children[0].innerHTML);
     }
 </script>
 {% endblock %}

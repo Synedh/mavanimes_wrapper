@@ -26,8 +26,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('PROD') != 'True'
-CSRF_COOKIE_SECURE = os.getenv('PROD') == 'True'
-SESSION_COOKIE_SECURE = os.getenv('PROD') == 'True'
+CSRF_COOKIE_SECURE = DEBUG
+SESSION_COOKIE_SECURE = DEBUG
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -35,6 +35,11 @@ ALLOWED_HOSTS = [
     'dev.synedh.fr'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://dev.synedh.fr'
+]
 
 # Application definition
 
@@ -152,7 +157,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ['static']
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

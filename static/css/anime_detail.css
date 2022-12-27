@@ -11,6 +11,23 @@ li {
 
 .anime_detail {
     margin-right: 20px;
+    max-width: 1200px;
+}
+
+.anime_detail .tags {
+    display: flex;
+}
+
+.anime_detail .tag {
+    padding: 3px 5px;
+    margin: 2px 5px;
+}
+
+.anime_detail .tag span {
+    background: inherit;
+    background-clip: text;
+    color: transparent;
+    filter: invert(1) grayscale(1) contrast(100);
 }
 
 .episodes_container {
