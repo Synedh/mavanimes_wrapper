@@ -35,6 +35,13 @@
                 {% endfor  %}
                 </div>
             </div>
+            <div class="tags">
+            {% for tag in anime.tags.all %}
+                <div class="tag shadowed rounded" style="background-color: {{ tag.color }}">
+                    <span>{{ tag.name }}</span>
+                </div>
+            {% endfor %}
+            </div>
         </div>
     </a>
 </div>

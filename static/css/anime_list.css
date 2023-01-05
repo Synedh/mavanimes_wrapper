@@ -28,3 +28,20 @@
     min-width: 200px;
     width: 500px;
 }
+
+.anime_snippet .tags {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.anime_snippet .tag {
+    padding: 3px 5px;
+    margin: 2px 5px;
+}
+
+.anime_snippet .tag span {
+    background: inherit;
+    background-clip: text;
+    color: transparent;
+    filter: invert(1) grayscale(1) contrast(100);
+}

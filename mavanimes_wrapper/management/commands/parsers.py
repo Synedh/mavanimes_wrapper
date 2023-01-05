@@ -20,8 +20,8 @@ def get_page(url, allow_to_fail=False):
 
 def ep_title_parser(ep_name):
     ep_name = unescape(ep_name)
-    season = next(iter(re.findall(r'seasons?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
-    ep_name = re.sub(r'(\(\s*)?seasons?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
+    season = next(iter(re.findall(r'saison?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
+    ep_name = re.sub(r'(\(\s*)?saison?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
 
     version = next(iter(re.findall(r'\W((?:VF)|(?:VOSTFR))', ep_name, re.IGNORECASE)), None)
     if version:

@@ -3,11 +3,20 @@ from django.contrib import admin
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
+import colorfield.fields
 
 from datetime import datetime
 
 class Tag(models.Model):
     name = models.CharField(max_length=1024)
+    color = colorfield.fields.ColorField()
+
+    def save(self, *args, **kwargs):
+        hashed = hash(self.name)
+        color = lambda i: (hashed >> i * 8) % 255
+        self.color = f'#{color(0):02x}{color(1):02x}{color(2):02x}'
+        return super().save(*args, **kwargs)
+
 
     def __str__(self) -> str:
         return self.name

@@ -31,9 +31,9 @@ class EpisodeAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'qty_animes')
+    list_display = ('name', 'color', 'qty_animes')
     search_fields = ('name',)
-    fields = ('name', 'qty_animes', 'list_animes')
+    fields = ('name', 'color', 'qty_animes', 'list_animes')
     readonly_fields = ('qty_animes', 'list_animes')
 
 admin.site.register(Tag, TagAdmin)

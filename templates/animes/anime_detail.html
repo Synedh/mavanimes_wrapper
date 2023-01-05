@@ -17,8 +17,8 @@
             <img src="{{ anime.image }}" />
             <div class="tags">
             {% for tag in anime.tags.all %}
-                <div class="tag shadowed rounded">
-                    <span>{{ tag }}</span>
+                <div class="tag shadowed rounded" style="background-color:{{ tag.color }}">
+                    <span>{{ tag.name }}</span>
                 </div>
             {% endfor %}
             </div>
@@ -87,18 +87,6 @@
                 episode_list.classList.add('toggled_off');
             }
         }
-    }
-
-    function stringToColour (str) {
-        const hash = [...str].reduce((hash, char) => char.charCodeAt(0) + (hash << 5) - hash, 0);
-        const hashToColor = i => (hash >> (i * 8)) & 0xFF;
-        const red = ('00' + hashToColor(0).toString(16)).substr(-2);
-        const green = ('00' + hashToColor(1).toString(16)).substr(-2);
-        const blue = ('00' + hashToColor(2).toString(16)).substr(-2);
-        return `#${red}${green}${blue}`
-    }
-    for (const tag of document.querySelectorAll('.tag')) {
-        tag.style.backgroundColor = stringToColour(tag.children[0].innerHTML);
     }
 </script>
 {% endblock %}

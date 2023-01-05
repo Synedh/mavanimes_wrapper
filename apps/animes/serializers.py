@@ -13,7 +13,7 @@ class AnimeSerializer(serializers.ModelSerializer):
         return anime.episodes.count()
 
     def get_qty_seasons(self, anime):
-        return next(iter(anime.episodes.aggregate(Max('season')).values()), 0)
+        return anime.episodes.latest('season').season if anime.episodes.count() else 0
 
     def get_image(self, anime):
         return anime.small_image if anime.small_image else anime.image

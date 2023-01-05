@@ -38,7 +38,6 @@ def anime_detail(request, slug):
     versions = {version: defaultdict(list) for version in anime.versions.split(',')}
 
     for episode in anime.episodes.all():
-        print(episode.name, episode.version)
         if episode.type == Episode.Type.SPECIAL:
             versions[episode.version]['Episodes speciaux'].append(episode)
         elif episode.type == Episode.Type.FILM:
