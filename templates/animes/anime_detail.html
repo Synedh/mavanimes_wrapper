@@ -27,7 +27,7 @@
                     Version{{ anime.versions|split:","|length|pluralize:"s" }}: {{ anime.versions }}
                 </li>
                 <li>
-                    Saison{{ saisons|pluralize:"s" }}: {{ saisons }}
+                    Saison{{ seasons|pluralize:"s" }}: {{ seasons }}
                 </li>
                 <li>
                     Episode{{ anime.episodes.count|pluralize:"s" }}: {{ anime.episodes.count }}
@@ -40,17 +40,17 @@
                 Episodes
             </h1>
             <div class="episodes_container">
-            {% for version, saisons_list in versions.items %}
+            {% for version, seasons_list in versions.items %}
                 <div class="versions">
                     <div class="version">
                         {{ version }}
                     </div>
-                    <div class="saisons">
-                    {% for saison, episodes in saisons_list.items %}
-                        {% if saisons_list|length > 1 %}
-                        <div class="saison {% if forloop.first %}selected{% endif %}" onclick="displaySeason({{ forloop.counter0 }})">
+                    <div class="seasons">
+                    {% for season, episodes in seasons_list.items %}
+                        {% if seasons_list|length > 1 %}
+                        <div class="season {% if forloop.first %}selected{% endif %}" onclick="displaySeason({{ forloop.counter0 }})">
                             <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
-                            {{ saison }}
+                            {{ season }}
                         </div>
                         {% endif %}
                         <ul class="episodes {% if not forloop.first %}toggled_off{% endif %}">
@@ -74,16 +74,16 @@
 
 {% block footer %}
 <script>
-    const saisons = document.querySelectorAll('.saison');
+    const seasons = document.querySelectorAll('.season');
     const episodes = document.querySelectorAll('.episodes');
 
     function displaySeason(id) {
         for (const [i, episode_list] of episodes.entries()) {
             if (i === id) {
-                saisons[i].classList.toggle('selected');
+                seasons[i].classList.toggle('selected');
                 episode_list.classList.toggle('toggled_off');
             } else {
-                saisons[i].classList.remove('selected');
+                seasons[i].classList.remove('selected');
                 episode_list.classList.add('toggled_off');
             }
         }

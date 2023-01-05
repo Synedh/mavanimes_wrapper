@@ -25,13 +25,15 @@
 </head>
 <body>
     {% include "header.html" %}
-    <div class="container">
-        {% block content %}
+    <div class="body">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        {% block footer %}
         {% endblock %}
     </div>
-
-    {% block footer %}
-    {% endblock %}
     <script>
         document.addEventListener('keyup', event => {
             if (event.key === 'f') {

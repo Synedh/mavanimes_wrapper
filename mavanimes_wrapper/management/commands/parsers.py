@@ -20,8 +20,8 @@ def get_page(url, allow_to_fail=False):
 
 def ep_title_parser(ep_name):
     ep_name = unescape(ep_name)
-    saison = next(iter(re.findall(r'saisons?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
-    ep_name = re.sub(r'(\(\s*)?saisons?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
+    season = next(iter(re.findall(r'seasons?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
+    ep_name = re.sub(r'(\(\s*)?seasons?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
 
     version = next(iter(re.findall(r'\W((?:VF)|(?:VOSTFR))', ep_name, re.IGNORECASE)), None)
     if version:
@@ -35,16 +35,16 @@ def ep_title_parser(ep_name):
 
     episode_type = Episode.Type.EPISODE
     splitted_name = ep_name.lower().split()
-    if re.search(r'\bsp.ciale?\b', ep_name, re.IGNORECASE):
+    if re.search(r'\bsp.ciale?s?\b', ep_name, re.IGNORECASE) or 'sp' in splitted_name:
         episode_type = Episode.Type.SPECIAL
     elif 'film' in splitted_name or 'movie' in splitted_name:
         episode_type = Episode.Type.FILM
-    elif 'oav' in splitted_name or 'ova' in splitted_name:
+    elif 'oav' in splitted_name or 'ova' in splitted_name or 'OAV-' in ep_name:
         episode_type = Episode.Type.OAV
 
     return {
         'anime': re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', ep_name).group(1),
-        'saison': int(saison),
+        'season': int(season),
         'number': float(number),
         'type': episode_type,
         'version': version

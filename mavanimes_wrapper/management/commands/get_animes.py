@@ -30,7 +30,7 @@ def html_to_episodes(anime_html):
     if not episodes_html:
         episodes_html = re.findall(r'<div>(?:<strong>)?<a title=".*?" href="(.*?)">(?:<strong>)?• (.*?)(?:</strong>)?</a>(?:</strong>)?</div>', anime_html)
     if not episodes_html:
-        episodes_html = re.findall(r'<a href="(.*?)">• (.*?)<', anime_html)
+        episodes_html = re.findall(r'<a (?:title=".*?" )?href="(.*?)">• (.*?)<', anime_html)
 
     total = len(episodes_html)
     episodes = []
@@ -39,7 +39,7 @@ def html_to_episodes(anime_html):
         episode = ep_title_parser(name)
         pub_date, video_urls = date_and_videos_of_ep(mav_url)
         episodes.append({
-            'saison': episode['saison'],
+            'season': episode['season'],
             'number': episode['number'],
             'type': episode['type'],
             'version': episode['version'].upper() if episode['version'] else None,
@@ -57,10 +57,10 @@ def html_to_episodes(anime_html):
     ep_eps = [ep for ep in episodes if ep['type'] == Episode.Type.EPISODE]
     if (
         len(ep_eps) and
-        max(ep['saison'] for ep in ep_eps) == 1 and
+        max(ep['season'] for ep in ep_eps) == 1 and
         max(ep['number'] for ep in ep_eps) != len(ep_eps)
     ):
-        input(f'Invalid number of eps. Max num: {max(ep["number"] for ep in ep_eps)}, nb eps: {len(ep_eps)}')
+        input(f'\aInvalid number of eps. Max num: {max(ep["number"] for ep in ep_eps)}, nb eps: {len(ep_eps)}')
     return episodes
 
 def url_to_anime(anime_url):
@@ -78,17 +78,19 @@ def url_to_anime(anime_url):
             description_html = re.search(r'INFORMATIONS D.*?</div>(.*?)<(?:(?:h2)|(?:div))', anime_html, re.DOTALL).group(1)
         except AttributeError as e:
             logger.error(e)
-            input()
+            input('\a')
             return None, []
     HTML_CLEANER.feed(description_html)
     description = HTML_CLEANER.close().strip()
 
     tags_line = re.search(r'genre\(?s?\)?\s?:(.*)', description, re.IGNORECASE).group(1) if 'genre' in description.lower() else ''
     tags = [tag.strip() for tag in re.findall(r'[\w \'’\-]+', tags_line.lower())]
+    anime_name = ' '.join(re.sub(r'(?:V[A-Z]+)|(?:\(?S(?:aison\s)?\d+\s*\)?)', '', anime_name).replace(' :', ':').split())
+    logger.info(f'Anime: {anime_name}')
 
     return (
         {
-            'name': ' '.join(re.sub(r'(?:V[A-Z]+)|(?:\(?S(?:aison\s)?\d+\)?)', '', anime_name).replace(' :', ':').split()),
+            'name': anime_name,
             'image': images[-1] if len(images) else None,
             'small_image': images[1] if len(images) > 1 else None,
             'tags': tags,
@@ -127,16 +129,16 @@ def save_anime(anime_dict, episodes_list):
                 episode=episode
             ) for url in video_urls]
             logger.info(f'{"New" if new_episode else "Updated"} episode {episode.name}')
-    
+
 
 def get_anime_url_list():
     anime_urls_html = get_page('http://www.mavanimes.co/tous-les-animes-en-vostfr-fullhd-2/')
     return re.findall(r'<li>\s*<a href=\"(.*?)\">', anime_urls_html, re.MULTILINE)
 
-def get_animes():
+def get_animes(start=0):
     anime_url_list = get_anime_url_list()
     total = len(anime_url_list)
-    for i, anime_url in enumerate(anime_url_list[323:], start=324):
+    for i, anime_url in enumerate(anime_url_list[start:], start=start + 1):
         anime, episodes = url_to_anime(anime_url)
         if not anime:
             logger.info(f'[{i}/{total}] Skipped {anime_url}')
@@ -149,4 +151,4 @@ class Command(BaseCommand):
     help = 'Get all mavanimes animes'
 
     def handle(self, *args, **options):
-        get_animes()
+        get_animes(1334)

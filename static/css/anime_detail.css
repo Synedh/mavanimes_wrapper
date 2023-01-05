@@ -42,7 +42,7 @@ li {
     background-color: var(--header-back-color);
 }
 
-.saison {
+.season {
     width: 100%;
     padding: 5px 15px 5px 5px;
     background-color: var(--secondary-back-color);
@@ -50,17 +50,17 @@ li {
     display: flex;
 }
 
-.saison svg {
+.season svg {
     rotate: 0deg;
     transition: all 0.2s linear;
 }
 
-.saison.selected svg {
+.season.selected svg {
     rotate: 90deg;
     transition: all 0.2s linear;
 }
 
-.saison:hover {
+.season:hover {
     cursor: pointer;
 }
 

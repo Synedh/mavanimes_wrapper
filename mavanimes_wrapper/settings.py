@@ -30,8 +30,9 @@ CSRF_COOKIE_SECURE = DEBUG
 SESSION_COOKIE_SECURE = DEBUG
 
 ALLOWED_HOSTS = [
-    'localhost',
+    '0.0.0.0',
     '127.0.0.1',
+    'localhost',
     'dev.synedh.fr'
 ]
 
@@ -50,8 +51,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'mavanimes_wrapper',
-    'apps.animes'
+    'apps.animes',
+    'apps.api'
 ]
 
 MIDDLEWARE = [
@@ -94,6 +97,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+# Rest Framework
+# https://www.django-rest-framework.org/
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
 }
 
 

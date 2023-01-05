@@ -28,18 +28,17 @@ def index(request):
     return render(request, 'index.html', context)
 
 def anime_list(request):
-    animes = Anime.objects.all().order_by('name')
-
     context = {
-        'animes': animes
+        'animes': Anime.objects.all()
     }
     return render(request, 'animes/anime_list.html', context)
 
-def anime(request, slug):
+def anime_detail(request, slug):
     anime = get_object_or_404(Anime, slug=slug)
     versions = {version: defaultdict(list) for version in anime.versions.split(',')}
 
     for episode in anime.episodes.all():
+        print(episode.name, episode.version)
         if episode.type == Episode.Type.SPECIAL:
             versions[episode.version]['Episodes speciaux'].append(episode)
         elif episode.type == Episode.Type.FILM:
@@ -47,15 +46,15 @@ def anime(request, slug):
         elif episode.type == Episode.Type.OAV:
             versions[episode.version]['OAV'].append(episode)
         else:
-            versions[episode.version][f'Saison {episode.saison}'].append(episode)
-    
-    for saisons in versions.values():
+            versions[episode.version][f'Saison {episode.season}'].append(episode)
+
+    for seasons in versions.values():
         # Disable defaultdict tools to be able to iterate in template
-        saisons.default_factory = None
+        seasons.default_factory = None
 
     context = {
         'anime': anime,
-        'saisons': anime.episodes.latest('saison').saison if anime.episodes.count() else 0,
+        'seasons': anime.episodes.latest('season').season if anime.episodes.count() else 0,
         'versions': versions
     }
     return render(request, 'animes/anime_detail.html', context)

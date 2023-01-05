@@ -23,7 +23,7 @@ def parse_ep(ep_xml):
 
     return {
         'anime': episode['anime'],
-        'saison': episode['saison'],
+        'season': episode['season'],
         'number': episode['number'],
         'version': episode['version'],
         'name': name,

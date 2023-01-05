@@ -171,6 +171,12 @@ header .search form input:focus ~ header .search form svg {
     color: var(--a-link-color);
 }
 
+.body {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 44px);
+}
+
 .container {
     display: flex;
     justify-content: center;
