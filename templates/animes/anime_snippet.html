@@ -23,9 +23,9 @@
             <div class="description">
                 <div class="episode">
                     <span>
-                        {{ anime.episodes.all|length }}
+                        {{ anime.episodes_count }}
                     </span>
-                    episode{{ anime.episodes.all|length|pluralize:"s" }}
+                    episode{{ anime.episodes_count|pluralize:"s" }}
                 </div>
                 <div class="versions">
                 {% for version in anime.versions|split:"," %}
@@ -35,13 +35,13 @@
                 {% endfor  %}
                 </div>
             </div>
-            <div class="tags">
+            {% comment %} <div class="tags">
             {% for tag in anime.tags.all %}
-                <div class="tag shadowed rounded" style="background-color: {{ tag.color }}">
-                    <span>{{ tag.name }}</span>
+                <div class="tag shadowed rounded" style="background-color:{{ tag.color }}">
+                    <span>{{ tag.name|title }}</span>
                 </div>
             {% endfor %}
-            </div>
+            </div> {% endcomment %}
         </div>
     </a>
 </div>

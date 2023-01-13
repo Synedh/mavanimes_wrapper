@@ -1,21 +1,23 @@
 .weekly_episodes {
-    flex: 1 0 auto;
-    columns: auto 420px;
-    margin-left:auto;
-    margin-right:auto;
     padding: 20px;
-}
-
-.weekly_episodes > * {
-    /* padding: 10px;
-    width: 400px; */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .weekly_episodes .date {
+    flex: 0 1 auto;
     font-variant: small-caps;
     font-size: x-large;
     font-weight: bold;
     color: var(--secondary-fore-color);
+}
+
+.weekly_episodes .episodes {
+    flex: 0 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1500px;
 }
 
 .no_episode {
@@ -31,7 +33,8 @@
     position: relative;
     margin: 5px 0 5px 10px;
     background: var(--secondary-back-color);
-    width: 400px;
+    width: 80vw;
+    max-width: 400px;
 }
 
 .episode_snippet .to_admin,
@@ -90,6 +93,11 @@
 .anime_snippet .infos .name {
     color: var(--secondary-fore-color);
     height: 48px;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 
 .episode_snippet .infos .description,

@@ -126,13 +126,13 @@ header .links {
 }
 
 @media screen and (min-width: 550px) {
-    header .logo_small {
+    .logo_small {
         display: none;
     }
 }
 
 @media screen and (max-width: 550px) {
-    header .logo_large {
+    .logo_large {
         display: none;
     }
 }
@@ -174,7 +174,6 @@ header .search form input:focus ~ header .search form svg {
 .body {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 44px);
 }
 
 .container {

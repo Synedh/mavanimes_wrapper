@@ -22,8 +22,7 @@
         <div class="videos">
         {% for video_url in episode.video_urls.all %}
             <div id="video_{{ video_url.source }}" class="video">
-                <iframe src="{{ video_url.url }}" title="{{ video_url.source }} video player" frameborder="0" allowfullscreen></iframe>
-                {% comment %} <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video player" frameborder="0" allowfullscreen></iframe> {% endcomment %}
+                <iframe src="{{ video_url.url }}" frameborder="0" allowfullscreen></iframe>
             </div>
         {% endfor %}
         </div>

@@ -1,4 +1,5 @@
 {% extends "overall.html" %}
+{% load urlparams %}
 
 {% block title %}Animes - {{ block.super }}{% endblock %}
 
@@ -11,45 +12,38 @@
 <div class="content">
     <div class="head_box">
         <h1>Animes</h1>
-        <input id="search_input" type="text" placeholder="Rechercher" onkeyup="filterAnimes(this.value); setSearchParams(this.value);" focus>
+        <input id="search_input" type="text" placeholder="Rechercher" value="{{ request.GET.search }}" onkeyup="event.keyCode === 13 && send(this.value)">
     </div>
     <div class="anime_list">
-    {% for anime in animes %}
-        {% include "animes/anime_snippet.html" %}
-    {% endfor %}
+        {% for anime in animes %}
+            {% include "animes/anime_snippet.html" %}
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if animes.has_previous %}
+                <a href="{% urlparams page='1' search=request.GET.search %}">&laquo; 1</a>
+                <a href="{% urlparams page=animes.previous_page_number search=request.GET.search %}">Prev</a>
+            {% endif %}
+
+            <span class="current">
+                {{ animes.number }}
+            </span>
+
+            {% if animes.has_next %}
+                <a href="{% urlparams page=animes.next_page_number search=request.GET.search %}">Next</a>
+                <a href="{% urlparams page=animes.paginator.num_pages search=request.GET.search %}">{{ animes.paginator.num_pages }} &raquo;</a>
+            {% endif %}
+        </span>
     </div>
 </div>
 {% endblock %}
 
 {% block footer %}
-<script lang="js">
-    const animes = document.querySelectorAll('.anime_snippet');
-    const params = new URLSearchParams(window.location.search);
-    const search = params.get('search') || '';
-
-    function setSearchParams(value) {
-        const url = new URL(window.location);
-        if (value) {
-            url.searchParams.set('search', value);
-        } else {
-            url.searchParams.delete('search');
-        }
-        window.history.pushState({}, '', url);
-    }
-
-    function filterAnimes(value) {
-        const lowerValue = value.toLocaleLowerCase();
-        for (const animeElement of animes) {
-            const animeName = animeElement.children[1].children[1].children[0].innerHTML;
-            if (animeName.toLocaleLowerCase().includes(lowerValue)) {
-                animeElement.classList.remove('hidden');
-            } else {
-                animeElement.classList.add('hidden');
-            }
-        }
-    }
-
-    filterAnimes(search);
-    document.getElementById('search_input').value = search;
+<script>
+function send (search) {
+    window.location = `?search=${search}`;
+}
 </script>
 {% endblock %}

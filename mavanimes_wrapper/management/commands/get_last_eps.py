@@ -3,16 +3,18 @@ from django.core.management.base import BaseCommand
 import dateutil.parser
 import logging
 import re
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree
 
 from .parsers import ep_title_parser, get_page
 from apps.animes.models import Anime, Episode, VideoURL
 
 logger = logging.getLogger(__name__)
+URL = 'http://www.mavanimes.co/'
 
 
-def get_anime_images(anime):
-    anime.save()
+def get_anime_images(anime, homepage):
+    res = re.search(rf'<a href="{anime.episodes.last().mav_url}">.*?src="(.*?)".*?srcset=".*?(?:(https?://.*?)\s.*?)+"', homepage, re.DOTALL)
+    return res.group(1), res.group(2)
 
 def parse_ep(ep_xml):
     name = ep_xml.find('title').text
@@ -32,11 +34,8 @@ def parse_ep(ep_xml):
         'pub_date': dateutil.parser.parse(date)
     }
 
-def save_ep(episode_dict):
+def save_ep(episode_dict, homepage):
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
-    if new_anime:
-        get_anime_images(anime)
-
     video_urls = episode_dict['video_urls']
     del episode_dict['video_urls']
     episode_dict['anime'] = anime
@@ -45,6 +44,11 @@ def save_ep(episode_dict):
         name=episode_dict['name'], anime=anime.id,
         defaults={**episode_dict}
     )
+    if new_anime:
+        image, small_image = get_anime_images(anime, homepage)
+        anime.image = image
+        anime.small_image = small_image
+        anime.save()
 
     previous_video_urls = [video_url.url for video_url in episode.video_urls.all()]
     if video_urls != previous_video_urls:
@@ -58,11 +62,9 @@ def save_ep(episode_dict):
     return episode
 
 def get_last_eps():
-    homepage = get_page('http://www.mavanimes.co/')
-    eps_html = re.findall(r'<div class="col\-sm\-3 col\-xs\-12">(.+?)<\/div>', homepage.replace('\n', ' '))
-    feed = ET.fromstring(get_page('http://www.mavanimes.co/feed/'))
+    feed = xml.etree.ElementTree.fromstring(get_page(f'{URL}feed/'))
     episodes = [parse_ep(xml_ep) for xml_ep in feed[0].findall('item')]
-    return [save_ep(episode) for episode in episodes]
+    return [save_ep(episode, get_page(URL)) for episode in episodes]
 
 class Command(BaseCommand):
     help = 'Get last mavanimes episodes'

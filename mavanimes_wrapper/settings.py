@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework',
+    'django_filters',
     'colorfield',
     'mavanimes_wrapper',
     'apps.animes',
@@ -100,14 +102,24 @@ DATABASES = {
     }
 }
 
+# Cache
+# https://docs.djangoproject.com/en/4.1/topics/cache/
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 # Rest Framework
 # https://www.django-rest-framework.org/
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'PAGE_SIZE': 10
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -149,6 +161,11 @@ LOGGING = {
         'level': 'INFO',
     }
 }
+
+# Shell plus
+# https://django-extensions.readthedocs.io/en/latest/shell_plus.html
+
+SHELL_PLUS = 'bpython'
 
 
 # Internationalization

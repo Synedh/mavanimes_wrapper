@@ -1,5 +1,6 @@
 .head_box {
     display: flex;
+    align-items: center;
     margin-bottom: 20px;
 }
 
@@ -35,8 +36,9 @@
 }
 
 .anime_snippet .tag {
-    padding: 3px 5px;
-    margin: 2px 5px;
+    font-size: small;
+    padding: 0 3px;
+    margin: 2px;
 }
 
 .anime_snippet .tag span {

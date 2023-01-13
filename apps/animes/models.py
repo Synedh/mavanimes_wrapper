@@ -44,6 +44,7 @@ class Anime(models.Model):
     small_image = models.URLField(blank=True, null=True, default=None)
     tags = models.ManyToManyField(Tag, blank=True, related_name='animes')
     versions = models.CharField(max_length=128, blank=True, default='')
+    episodes_count = models.IntegerField(default=0)
     description = models.TextField(blank=True, default='')
     update_date = models.DateTimeField(auto_now_add=True)
     mav_url = models.URLField(blank=True, default='')
@@ -82,11 +83,13 @@ class Episode(models.Model):
     mav_url = models.URLField()
 
     def save(self, *args, **kwargs):
+        self.value = f'{self.type.lower()}x{self.season}x{self.number:g}'
+        s = super().save(*args, **kwargs)
         anime_versions = set(self.anime.versions.split(',')) | set([self.version])
         self.anime.versions = ','.join(sorted(v for v in list(anime_versions) if v))
+        self.anime.episodes_count = self.anime.episodes.count()
         self.anime.save()
-        self.value = f'{self.type.lower()}x{self.season}x{self.number:g}'
-        return super().save(*args, **kwargs)
+        return s
 
     def get_absolute_url(self) -> str:
         return reverse('episode', kwargs={'value': self.value})
@@ -95,7 +98,7 @@ class Episode(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['number', 'season', 'version', 'anime__name']
+        ordering = ['season', 'number', 'version', 'anime__name']
         verbose_name = 'Episode'
         verbose_name_plural = 'Episodes'
 

@@ -10,15 +10,17 @@
     <div class="date">
         {{ date|date:"l d F"|title }}
     </div>
+    <div class="episodes">
     {% for episode in episodes %}
-    <div class="episode">
-        {% include "animes/episode_snippet.html" %}
-    </div>
+        <div class="episode">
+            {% include "animes/episode_snippet.html" %}
+        </div>
     {% empty %}
-    <div class="no_episode">
-        Aucune sortie
-    </div>
+        <div class="no_episode">
+            Aucune sortie
+        </div>
     {% endfor %}
+    </div>
 {% endfor %}
     <div class="section_name">
         Derniers animes

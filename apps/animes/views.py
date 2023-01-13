@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 
 from datetime import datetime, timedelta
@@ -28,8 +29,14 @@ def index(request):
     return render(request, 'index.html', context)
 
 def anime_list(request):
+    limit = request.GET.get('limit', 100)
+    page = request.GET.get('page')
+    search = request.GET.get('search', '')
+
+    animes = Anime.objects.filter(name__icontains=search)
+    paginator = Paginator(animes, limit)
     context = {
-        'animes': Anime.objects.all()
+        'animes': paginator.get_page(page)
     }
     return render(request, 'animes/anime_list.html', context)
 

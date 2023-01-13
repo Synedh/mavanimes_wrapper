@@ -18,7 +18,7 @@
             <div class="tags">
             {% for tag in anime.tags.all %}
                 <div class="tag shadowed rounded" style="background-color:{{ tag.color }}">
-                    <span>{{ tag.name }}</span>
+                    <span>{{ tag.name|title }}</span>
                 </div>
             {% endfor %}
             </div>
