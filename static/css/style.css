@@ -16,6 +16,8 @@ body {
     --secondary-back-color: rgb(21, 32, 43);
     --secondary-fore-color: rgb(255, 255, 255, 0.8);
 
+    --a-visited-color: var(--a-link-color);
+
     --header-back-color: rgb(28, 41, 56);
     --header-fore-color: rgb(255, 255, 255, 0.8);
     --header-hover-back-color: var(--header-back-color);
@@ -125,13 +127,13 @@ header .links {
     margin-left: 20px;
 }
 
-@media screen and (min-width: 550px) {
+@media screen and (min-width: 600px) {
     .logo_small {
         display: none;
     }
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
     .logo_large {
         display: none;
     }
@@ -192,7 +194,7 @@ header .search form input:focus ~ header .search form svg {
     justify-content: center;
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
     .container {
         flex-direction: column;
     }

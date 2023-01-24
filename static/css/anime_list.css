@@ -22,6 +22,7 @@
 .anime_list {
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
     justify-content: center;
 }
 
@@ -46,4 +47,26 @@
     background-clip: text;
     color: transparent;
     filter: invert(1) grayscale(1) contrast(100);
+}
+
+.pagination {
+    display: flex;
+    margin: 20px auto;
+}
+
+.pagination > * {
+    border: 1px solid var(--fore-color);
+    border-left: none;
+    padding: 5px 10px;
+    font-size: small;
+    font-weight: bold;
+}
+
+.pagination > *:first-child {
+    border-left: 1px solid;
+    border-radius: 5px 0 0 5px;
+}
+
+.pagination > *:last-child {
+    border-radius: 0 5px 5px 0;
 }

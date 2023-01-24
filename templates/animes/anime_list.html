@@ -21,21 +21,23 @@
     </div>
 
     <div class="pagination">
-        <span class="step-links">
-            {% if animes.has_previous %}
-                <a href="{% urlparams page='1' search=request.GET.search %}">&laquo; 1</a>
-                <a href="{% urlparams page=animes.previous_page_number search=request.GET.search %}">Prev</a>
-            {% endif %}
+    {% if animes.has_previous %}
+        <a href="{% urlparams page='1' search=request.GET.search %}">&laquo; 1</a>
+        <a href="{% urlparams page=animes.previous_page_number search=request.GET.search %}">PREC</a>
+    {% else %}
+        <div>&laquo; 1</div>
+        <div>PREC</div>
+    {% endif %}
 
-            <span class="current">
-                {{ animes.number }}
-            </span>
+        <div class="current">{{ animes.number }}</div>
 
-            {% if animes.has_next %}
-                <a href="{% urlparams page=animes.next_page_number search=request.GET.search %}">Next</a>
-                <a href="{% urlparams page=animes.paginator.num_pages search=request.GET.search %}">{{ animes.paginator.num_pages }} &raquo;</a>
-            {% endif %}
-        </span>
+    {% if animes.has_next %}
+        <a href="{% urlparams page=animes.next_page_number search=request.GET.search %}">SUIV</a>
+        <a href="{% urlparams page=animes.paginator.num_pages search=request.GET.search %}">{{ animes.paginator.num_pages }} &raquo;</a>
+    {% else %}
+        <div>SUIV</div>
+        <div>{{ animes.paginator.num_pages }} &raquo;</div>
+    {% endif %}
     </div>
 </div>
 {% endblock %}

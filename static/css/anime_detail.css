@@ -1,8 +1,8 @@
 .content {
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: flex-start;
-    max-height: 15em;
+    margin: 0 auto;
+    width: 90vw;
 }
 
 li {
@@ -10,12 +10,21 @@ li {
 }
 
 .anime_detail {
+    flex: 1 0 auto;
+    max-width: 100%;
     margin-right: 20px;
-    max-width: 1200px;
+}
+
+.anime_detail img {
+    display: block;
+    margin: 10px auto;
 }
 
 .anime_detail .tags {
     display: flex;
+    flex-wrap: wrap;
+    width: fit-content;
+    margin: 10px auto;
 }
 
 .anime_detail .tag {
@@ -25,6 +34,7 @@ li {
 
 .anime_detail .tag span {
     background: inherit;
+    -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     filter: invert(1) grayscale(1) contrast(100);
@@ -32,7 +42,7 @@ li {
 
 .episodes_container {
     width: calc(100% + 10px);
-    max-height: calc(100vh - 150px);
+    max-height: calc(100vh - 200px);
     overflow: hidden auto;
 }
 

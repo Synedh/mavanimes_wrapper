@@ -3,25 +3,37 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    max-width: 410px;
+}
+
+@media screen and (min-width: 900px) {
+    .weekly_episodes {
+        max-width: 830px;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .weekly_episodes {
+        max-width: 1240px;
+    }
 }
 
 .weekly_episodes .date {
-    flex: 0 1 auto;
+    color: var(--secondary-fore-color);
     font-variant: small-caps;
     font-size: x-large;
     font-weight: bold;
-    color: var(--secondary-fore-color);
 }
 
-.weekly_episodes .episodes {
-    flex: 0 1 auto;
+.weekly_episodes > .episodes {
     display: flex;
     flex-wrap: wrap;
-    max-width: 1500px;
+    gap: 10px;
+    margin: 5px 10px;
 }
 
 .no_episode {
-    margin: 5px 0 5px 10px;
 }
 
 .episode:nth-child(odd) {
@@ -31,7 +43,6 @@
 .episode_snippet,
 .anime_snippet {
     position: relative;
-    margin: 5px 0 5px 10px;
     background: var(--secondary-back-color);
     width: 80vw;
     max-width: 400px;
@@ -64,21 +75,26 @@
 
 .episode_snippet .image_container,
 .anime_snippet .image_container {
+    position: relative;
     display: flex;
     flex: 1 0 auto;
     justify-content: center;
     align-items: center;
     background-color: grey;
     width: 110px;
-    max-width: 110px;
     height: 82px;
     object-fit: cover;
 }
 
+.episode_snippet .image_container svg,
+.anime_snippet .image_container svg {
+    position: absolute;
+}
+
 .episode_snippet .image_container img,
 .anime_snippet .image_container img {
+    position: absolute;
     width: 110px;
-    max-width: 110px;
     height: 82px;
     object-fit: cover;
 }

@@ -54,14 +54,19 @@ def anime_detail(request, slug):
         else:
             versions[episode.version][f'Saison {episode.season}'].append(episode)
 
-    for seasons in versions.values():
-        # Disable defaultdict tools to be able to iterate in template
-        seasons.default_factory = None
+    content = {
+        version: sorted([{
+            'name': ep_type,
+            'values': val
+        } for ep_type, val in values.items()],
+        key=lambda season: ('0' if season["name"][0] == 'S' else '') + season["name"])
+        for version, values in versions.items()
+    }
 
     context = {
         'anime': anime,
         'seasons': anime.episodes.latest('season').season if anime.episodes.count() else 0,
-        'versions': versions
+        'versions': content
     }
     return render(request, 'animes/anime_detail.html', context)
 
