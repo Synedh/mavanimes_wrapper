@@ -33,9 +33,6 @@
     margin: 5px 10px;
 }
 
-.no_episode {
-}
-
 .episode:nth-child(odd) {
     background: rgba(var(--secondary-back-color), 0.6);
 }

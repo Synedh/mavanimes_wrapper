@@ -123,13 +123,13 @@ header .logo .mav_wrapper {
     font-size: medium;
 }
 
-header .links {
-    margin-left: 20px;
-}
-
 @media screen and (min-width: 600px) {
     .logo_small {
         display: none;
+    }
+
+    header .links {
+        margin-left: 20px;
     }
 }
 
@@ -145,6 +145,7 @@ header .search {
 }
 
 header .search form {
+    margin-left: 0;
     width: 100%;
     display: flex;
     align-items: center;
@@ -165,17 +166,11 @@ header .search form input {
     margin-top: 0;
     padding: calc(0.5 * var(--universal-padding)) calc(1.5 * var(--universal-padding));;
     border-radius: 0;
-
     outline: none;
 }
 
-header .search form input:focus ~ header .search form svg {
+header .search form:focus-within svg {
     color: var(--a-link-color);
-}
-
-.body {
-    display: flex;
-    flex-direction: column;
 }
 
 .container {
@@ -192,12 +187,6 @@ header .search form input:focus ~ header .search form svg {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-@media screen and (max-width: 600px) {
-    .container {
-        flex-direction: column;
-    }
 }
 
 footer * {
