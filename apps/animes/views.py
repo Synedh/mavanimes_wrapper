@@ -1,9 +1,9 @@
+from datetime import datetime, timedelta
+from collections import defaultdict
+
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
-
-from datetime import datetime, timedelta
-from collections import defaultdict
 
 from .models import Anime, Episode
 
