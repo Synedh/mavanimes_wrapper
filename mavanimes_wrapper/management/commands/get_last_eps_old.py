@@ -1,9 +1,9 @@
-from django.utils import timezone
-from django.core.management.base import BaseCommand
-
 import logging
 import re
 import requests
+
+from django.utils import timezone
+from django.core.management.base import BaseCommand
 
 from .parsers import ep_title_parser
 from apps.animes.models import Anime, Episode, VideoURL
@@ -64,7 +64,7 @@ def save_ep(episode_dict):
     ) for url in video_urls]
 
     if new_episode or any(new_url for _, new_url in videos):
-        logger.info(f'{"New" if new_episode else "Updated"} episode {episode.name}')
+        logger.info('%s episode %s', "New" if new_episode else "Updated", episode.name)
         episode.upload_date = timezone.now()
         episode.save()
     return episode

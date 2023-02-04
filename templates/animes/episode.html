@@ -27,9 +27,9 @@
         {% endfor %}
         </div>
         <div class="controls">
-            {% if previous_value %}
-            <a class="previous large" href="{% url 'animes:episode' slug=episode.anime.slug value=previous_value %}">&laquo; Précédent</a>
-            <a class="previous small" href="{% url 'animes:episode' slug=episode.anime.slug value=previous_value %}">&laquo; Préc</a>
+            {% if previous %}
+            <a class="previous large" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}">&laquo; Précédent</a>
+            <a class="previous small" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}">&laquo; Préc</a>
             {% else %}
             <div class="large"></div>
             <div class="small"></div>
@@ -37,9 +37,9 @@
             <a class="anime" href="{% url 'animes:anime_detail' episode.anime.slug %}">
                 Tous les épisodes
             </a>
-            {% if next_value %}
-            <a class="next large" href="{% url 'animes:episode' slug=episode.anime.slug value=next_value %}">Suivant &raquo;</a>
-            <a class="next small" href="{% url 'animes:episode' slug=episode.anime.slug value=next_value %}">Suiv &raquo;</a>
+            {% if next %}
+            <a class="next large" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}">Suivant &raquo;</a>
+            <a class="next small" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}">Suiv &raquo;</a>
             {% else %}
             <div class="large"></div>
             <div class="small"></div>

@@ -1,10 +1,12 @@
+{% load numberformat %}
+
 <div class="episode_snippet">
     {% if user.is_superuser %}
     <a href="{% url 'admin:animes_episode_change' episode.id %}" class="to_admin" title="Ouvrir dans l'admin">
         @
     </a>
     {% endif %}
-    <a href="{% url 'animes:episode' slug=episode.anime.slug value=episode.value %}">
+    <a href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=episode.slug %}">
         <div class="image_container">
             {% if episode.anime.small_image %}
             <img src="{{ episode.anime.small_image }}" alt="{{ episode.name }}" />
@@ -21,7 +23,7 @@
                     {{ episode.type|title }}
                     {% if episode.number %}
                     <span>
-                        {{ episode.number|floatformat }}
+                        {{ episode.number|numberformat }}
                     </span>
                     {% endif %}
                 </div>

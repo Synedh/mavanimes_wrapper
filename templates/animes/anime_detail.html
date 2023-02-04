@@ -1,5 +1,6 @@
 {% extends "overall.html" %}
 {% load split %}
+{% load numberformat %}
 
 {% block title %}{{ anime.name }} - {{ block.super }}{% endblock %}
 
@@ -56,8 +57,8 @@
                         <ul class="episodes {% if not forloop.first %}toggled_off{% endif %}">
                         {% for episode in season.values %}
                             <li class="episode">
-                                <a href="{% url 'animes:episode' slug=anime.slug value=episode.value %}">
-                                    {{ episode.type|title }}{% if episode.number %} {{ episode.number|floatformat }}{% endif %}
+                                <a href="{% url 'animes:episode' anime_slug=anime.slug episode_slug=episode.slug %}">
+                                    {{ episode.type|title }}{% if episode.number %} {{ episode.number|numberformat }}{% endif %}
                                 </a>
                             </li>
                         {% endfor %}

@@ -73,7 +73,7 @@ class Episode(models.Model):
         SPECIAL = 'SPECIAL'
 
     name = models.CharField(max_length=1024)
-    value = models.CharField(max_length=128)
+    slug = models.SlugField(max_length=128)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, related_name='episodes')
     type = models.CharField(max_length=7, choices=Type.choices, blank=True, default=Type.EPISODE)
     number = models.FloatField(blank=True, null=True, default=None)
@@ -83,16 +83,15 @@ class Episode(models.Model):
     mav_url = models.URLField()
 
     def save(self, *args, **kwargs):
-        self.value = f'{self.type.lower()}x{self.season}x{self.number:g}'
-        s = super().save(*args, **kwargs)
+        self.slug = f'{self.type.lower()}-{self.season}-{self.number:g}'
+        super().save(*args, **kwargs)
         anime_versions = set(self.anime.versions.split(',')) | set([self.version])
         self.anime.versions = ','.join(sorted(v for v in list(anime_versions) if v))
         self.anime.episodes_count = self.anime.episodes.count()
         self.anime.save()
-        return s
 
     def get_absolute_url(self) -> str:
-        return reverse('episode', kwargs={'value': self.value})
+        return reverse('episode', kwargs={'slug': self.slug})
 
     def __str__(self) -> str:
         return self.name
@@ -110,6 +109,10 @@ class VideoURL(models.Model):
 
     def __str__(self) -> str:
         return f'{self.source} - {self.url}'
+
+    def save(self, *args, **kwargs):
+        self.source = self.url.split('.', maxsplit=1)[0].split('/')[-1]
+        return super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['-episode__id']

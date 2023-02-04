@@ -70,19 +70,19 @@ def anime_detail(request, slug):
     }
     return render(request, 'animes/anime_detail.html', context)
 
-def episode(request, slug, value):
-    episode = get_object_or_404(Episode, anime__slug=slug, value=value)
+def episode_detail(request, anime_slug, episode_slug):
+    episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
     episode_index = list(episode.anime.episodes.all()).index(episode)
 
-    previous_value, next_value = None, None
+    previous_ep, next_ep = None, None
     if episode_index > 0:
-        previous_value = episode.anime.episodes.all()[episode_index - 1].value
+        previous_ep = episode.anime.episodes.all()[episode_index - 1].slug
     if episode_index < episode.anime.episodes.count() - 1:
-        next_value = episode.anime.episodes.all()[episode_index + 1].value
+        next_ep = episode.anime.episodes.all()[episode_index + 1].slug
 
     context = {
         'episode': episode,
-        'previous_value': previous_value,
-        'next_value': next_value
+        'previous': previous_ep,
+        'next': next_ep
     }
     return render(request, 'animes/episode.html', context)

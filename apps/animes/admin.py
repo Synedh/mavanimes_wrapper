@@ -10,13 +10,14 @@ class EpisodeInline(admin.StackedInline):
 class VideoURLInline(admin.TabularInline):
     model = VideoURL
     extra = 0
-    fields = ('source', 'url')
+    fields = ('url',)
 
 class AnimeAdmin(admin.ModelAdmin):
     list_display = ('name', 'episodes_count', 'update_date')
     search_fields = ('name',)
     ordering = ('name', 'episodes_count', 'update_date')
-    fields = ('name', 'image', 'small_image', 'tags', 'versions', 'description', 'update_date', 'mav_url', 'episodes_count')
+    fields = ('name', 'image', 'small_image', 'tags', 'versions', 'description',
+              'update_date', 'mav_url', 'episodes_count')
     readonly_fields = ('update_date', 'episodes_count')
     autocomplete_fields = ('tags',)
     inlines = [EpisodeInline]
@@ -32,7 +33,6 @@ class EpisodeAdmin(admin.ModelAdmin):
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('url', 'source')
     search_fields = ('source', 'url')
-    pass
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'qty_animes')

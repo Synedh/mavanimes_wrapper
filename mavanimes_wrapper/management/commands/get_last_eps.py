@@ -1,12 +1,12 @@
-from django.core.management.base import BaseCommand
-
-import dateutil.parser
 import logging
 import re
 import xml.etree.ElementTree
 
-from .parsers import ep_title_parser, get_page
+import dateutil.parser
+from django.core.management.base import BaseCommand
+
 from apps.animes.models import Anime, Episode, VideoURL
+from .parsers import ep_title_parser, get_page
 
 logger = logging.getLogger(__name__)
 URL = 'http://www.mavanimes.co/'
@@ -53,12 +53,12 @@ def save_ep(episode_dict, homepage):
     previous_video_urls = [video_url.url for video_url in episode.video_urls.all()]
     if video_urls != previous_video_urls:
         episode.video_urls.all().delete()
-        [VideoURL.objects.get_or_create(
+        _ = [VideoURL.objects.get_or_create(
             url=url,
             source=url.split('.')[0].split('/')[-1],
             episode=episode
         ) for url in video_urls]
-        logger.info(f'{"New" if new_episode else "Updated"} episode {episode.name}')
+        logger.info('%s episode %s', "New" if new_episode else "Updated", episode.name)
     return episode
 
 def get_last_eps():
