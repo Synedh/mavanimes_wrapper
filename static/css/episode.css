@@ -10,12 +10,18 @@
     margin: 20px;
 }
 
+.video_reader .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
 .video_reader .tabs {
     display: flex;
 }
 
 .video_reader .tabs .tab_button {
     background-color: var(--back-color);
+    color: var(--fore-color);
     font-size: small;
     font-weight: bold;
     border-right: 1px solid;

@@ -3,7 +3,7 @@
 
 # Project tools
 .env
-log/
+*.log
 
 # Python
 env/

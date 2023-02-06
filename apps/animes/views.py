@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from django.utils import timezone
 from django.core.paginator import Paginator
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 
 from .models import Anime, Episode
@@ -72,6 +73,7 @@ def anime_detail(request, slug):
 
 def episode_detail(request, anime_slug, episode_slug):
     episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
+    episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
     episode_index = list(episode.anime.episodes.all()).index(episode)
 
     previous_ep, next_ep = None, None
@@ -86,3 +88,10 @@ def episode_detail(request, anime_slug, episode_slug):
         'next': next_ep
     }
     return render(request, 'animes/episode.html', context)
+
+def refresh_episode(request, anime_slug, episode_slug):
+    if request.method == 'PATCH':
+        episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
+        return HttpResponse('OK')
+    else:
+        raise Http404('Page not found')
