@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 
-from .models import Anime, Episode
+from .models import Anime, Episode, Tag
 
 def index(request):
     seven_days_ago = timezone.make_aware(datetime(*(timezone.now().date() - timedelta(days=7)).timetuple()[:6]))
@@ -33,11 +33,16 @@ def anime_list(request):
     limit = request.GET.get('limit', 100)
     page = request.GET.get('page')
     search = request.GET.get('search', '')
+    tag_names = request.GET.get('tags', '').split(',')
 
+    tags = Tag.objects.filter(name__in=tag_names)
     animes = Anime.objects.filter(name__icontains=search)
+    for tag in tags:
+        animes = animes.filter(tags=tag)
     paginator = Paginator(animes, limit)
     context = {
-        'animes': paginator.get_page(page)
+        'animes': paginator.get_page(page),
+        'search_tags': tags
     }
     return render(request, 'animes/anime_list.html', context)
 

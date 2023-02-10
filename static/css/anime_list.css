@@ -4,8 +4,18 @@
     margin-bottom: 20px;
 }
 
-.head_box .title {
-    margin-right: 30px;
+.head_box .tag {
+    border-radius: 9999px;
+    padding: 2px 8px;
+    margin: 0 3px;
+}
+
+.head_box .tag span {
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: invert(1) grayscale(1) contrast(100);
 }
 
 #search_input {

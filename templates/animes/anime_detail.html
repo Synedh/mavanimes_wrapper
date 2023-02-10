@@ -1,6 +1,7 @@
 {% extends "overall.html" %}
-{% load split %}
 {% load numberformat %}
+{% load split %}
+{% load urlparams %}
 
 {% block title %}{{ anime.name }} - {{ block.super }}{% endblock %}
 
@@ -18,9 +19,9 @@
             <img src="{{ anime.image }}" />
             <div class="tags">
             {% for tag in anime.tags.all %}
-                <div class="tag shadowed rounded" style="background-color:{{ tag.color }}">
+                <a class="tag shadowed rounded" href="{% url 'animes:anime_list' %}{% urlparams tags=tag.name %}" style="background-color:{{ tag.color }}">
                     <span>{{ tag.name|title }}</span>
-                </div>
+                </a>
             {% endfor %}
             </div>
             <ul>

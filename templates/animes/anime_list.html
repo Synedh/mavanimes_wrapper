@@ -1,4 +1,5 @@
 {% extends "overall.html" %}
+{% load exclude %}
 {% load urlparams %}
 
 {% block title %}Animes - {{ block.super }}{% endblock %}
@@ -13,6 +14,12 @@
     <div class="head_box">
         <h1>Animes</h1>
         <input id="search_input" type="text" placeholder="Rechercher" value="{{ request.GET.search }}" onkeyup="event.keyCode === 13 && send(this.value)">
+        {% for tag in search_tags %}
+        <a href="{% urlparams page='1' search=request.GET.search tags=request.GET.tags|exclude:tag.name %}" class="tag" style="background-color: {{ tag.color }}">
+            <span>{{ tag.name }}</span>
+            <span>x</span>
+        </a>
+        {% endfor %}
     </div>
     <div class="anime_list">
         {% for anime in animes %}
@@ -22,8 +29,8 @@
 
     <div class="pagination">
     {% if animes.has_previous %}
-        <a href="{% urlparams page='1' search=request.GET.search %}">&laquo; 1</a>
-        <a href="{% urlparams page=animes.previous_page_number search=request.GET.search %}">PREC</a>
+        <a href="{% urlparams page='1' search=request.GET.search tags=request.GET.tags %}">&laquo; 1</a>
+        <a href="{% urlparams page=animes.previous_page_number search=request.GET.search tags=request.GET.tags %}">PREC</a>
     {% else %}
         <div>&laquo; 1</div>
         <div>PREC</div>
@@ -32,8 +39,8 @@
         <div class="current">{{ animes.number }}</div>
 
     {% if animes.has_next %}
-        <a href="{% urlparams page=animes.next_page_number search=request.GET.search %}">SUIV</a>
-        <a href="{% urlparams page=animes.paginator.num_pages search=request.GET.search %}">{{ animes.paginator.num_pages }} &raquo;</a>
+        <a href="{% urlparams page=animes.next_page_number search=request.GET.search tags=request.GET.tags %}">SUIV</a>
+        <a href="{% urlparams page=animes.paginator.num_pages search=request.GET.search tags=request.GET.tags %}">{{ animes.paginator.num_pages }} &raquo;</a>
     {% else %}
         <div>SUIV</div>
         <div>{{ animes.paginator.num_pages }} &raquo;</div>
@@ -44,8 +51,10 @@
 
 {% block footer %}
 <script>
+const tags = '{{ request.GET.tags }}';
+
 function send (search) {
-    window.location = `?search=${search}`;
+    window.location = `?search=${search}${ tags.length ? `&${tags}` : '' }`;
 }
 </script>
 {% endblock %}
