@@ -61,7 +61,8 @@
 
 .episode_snippet:hover,
 .anime_snippet:hover {
-    filter: brightness(120%);
+    filter: brightness(140%);
+    transition: var(--universal-transition);
 }
 
 .episode_snippet a,

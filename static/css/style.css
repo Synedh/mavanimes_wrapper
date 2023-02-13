@@ -47,6 +47,8 @@ body {
     --modal-close-color: var(--button-back-color);
     --modal-close-hover-color: var(--secondary-back-color);
     --modal-close-button-hover-color: var(--secondary-fore-color);
+
+    --universal-transition: all 0.2s;
 }
 
 [type="checkbox"].modal + div .card .modal-close:hover::before,

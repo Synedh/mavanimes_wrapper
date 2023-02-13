@@ -6,7 +6,7 @@ import dateutil.parser
 from django.core.management.base import BaseCommand
 
 from apps.animes.models import Anime, Episode, VideoURL
-from .parsers import ep_title_parser, get_page
+from utils.parsers import ep_title_parser, get_page
 
 logger = logging.getLogger(__name__)
 URL = 'http://www.mavanimes.co/'

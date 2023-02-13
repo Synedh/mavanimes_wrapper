@@ -24,10 +24,13 @@
                 <a class="tab_button" href="{% url 'animes:anime_detail' episode.anime.slug %}" title="Aller vers l'anime">
                     ANIME
                 </a>
+                <a class="tab_button" href="{{ episode.mav_url }}" target="blank" rel="noreferrer noopener" title="Ouvrir dans mavanimes">
+                    MAV
+                </a>
+                {% if user.is_superuser %}
                 <div class="tab_button" title="Remonter une erreur" onclick="reportIssue({{ anime.id }})">
                     !
                 </div>
-                {% if user.is_superuser %}
                 <a class="tab_button" href="{% url 'admin:animes_episode_change' episode.id %}" title="Ouvrir dans l'admin">
                     @
                 </a>
@@ -41,30 +44,21 @@
             </div>
         </div>
         <div class="videos">
+        {% if previous %}
+        <a class="command previous" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}" onclick="console.log('foo')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.71 15.88L10.83 12l3.88-3.88a.996.996 0 1 0-1.41-1.41L8.71 11.3a.996.996 0 0 0 0 1.41l4.59 4.59c.39.39 1.02.39 1.41 0c.38-.39.39-1.03 0-1.42z"/></svg>
+        </a>
+        {% endif %}
+        {% if next %}
+        <a class="command next" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
+        </a>
+        {% endif %}
         {% for video_url in episode.video_urls.all %}
             <div id="video_{{ video_url.source }}" class="video">
                 <iframe src="{{ video_url.url }}" frameborder="0" allowfullscreen></iframe>
             </div>
         {% endfor %}
-        </div>
-        <div class="controls">
-            {% if previous %}
-            <a class="previous large" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}">&laquo; Précédent</a>
-            <a class="previous small" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}">&laquo; Préc</a>
-            {% else %}
-            <div class="large"></div>
-            <div class="small"></div>
-            {% endif %}
-            <a class="anime" href="{% url 'animes:anime_detail' episode.anime.slug %}">
-                Tous les épisodes
-            </a>
-            {% if next %}
-            <a class="next large" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}">Suivant &raquo;</a>
-            <a class="next small" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}">Suiv &raquo;</a>
-            {% else %}
-            <div class="large"></div>
-            <div class="small"></div>
-            {% endif %}
         </div>
     </div>
 </div>
@@ -90,7 +84,7 @@
     async function sendReload(id) {
         const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         const test = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
-        console.log(await test.text());
+        alert(await test.text());
     }
 
     function reportIssue(id) {

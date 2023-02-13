@@ -16,7 +16,7 @@
     </h1>
     <div class="content">
         <div class="anime_detail">
-            <img src="{{ anime.image }}" />
+            <img src="https://wsrv.nl/?url={{ anime.image }}" />
             <div class="tags">
             {% for tag in anime.tags.all %}
                 <a class="tag shadowed rounded" href="{% url 'animes:anime_list' %}{% urlparams tags=tag.name %}" style="background-color:{{ tag.color }}">

@@ -10,6 +10,11 @@
     margin: 0 3px;
 }
 
+.head_box .tag:hover {
+    filter: brightness(140%);
+    transition: var(--universal-transition);
+}
+
 .head_box .tag span {
     background: inherit;
     -webkit-background-clip: text;

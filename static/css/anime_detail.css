@@ -33,6 +33,11 @@ li {
     margin: 2px;
 }
 
+.anime_detail .tag:hover {
+    filter: brightness(140%);
+    transition: var(--universal-transition);
+}
+
 .anime_detail .tag span {
     background: inherit;
     -webkit-background-clip: text;

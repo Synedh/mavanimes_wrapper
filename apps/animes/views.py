@@ -3,10 +3,12 @@ from collections import defaultdict
 
 from django.utils import timezone
 from django.core.paginator import Paginator
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseServerError
 from django.shortcuts import render, get_object_or_404
 
-from .models import Anime, Episode, Tag
+from utils.parsers import date_and_videos_of_ep
+from .models import Anime, Episode, Tag, VideoURL
+
 
 def index(request):
     seven_days_ago = timezone.make_aware(datetime(*(timezone.now().date() - timedelta(days=7)).timetuple()[:6]))
@@ -97,6 +99,23 @@ def episode_detail(request, anime_slug, episode_slug):
 def refresh_episode(request, anime_slug, episode_slug):
     if request.method == 'PATCH':
         episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
-        return HttpResponse('OK')
+        try:
+            pub_date, video_urls = date_and_videos_of_ep(episode.mav_url)
+            episode.pub_date = pub_date
+
+            previous_video_urls = [video_url.url for video_url in episode.video_urls.all()]
+            msg = 'No update required'
+            if video_urls != previous_video_urls:
+                episode.video_urls.all().delete()
+                _ = [VideoURL.objects.get_or_create(
+                    url=url,
+                    source=url.split('.')[0].split('/')[-1],
+                    episode=episode
+                ) for url in video_urls]
+                msg = 'Update done, please refresh the page.'
+            episode.save()
+            return HttpResponse(msg)
+        except Exception as err:
+            return HttpResponseServerError(err)
     else:
         raise Http404('Page not found')

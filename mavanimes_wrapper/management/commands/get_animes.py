@@ -6,7 +6,7 @@ from html import unescape
 from html.parser import HTMLParser
 
 from apps.animes.models import Anime, Episode, VideoURL, Tag
-from .parsers import date_and_videos_of_ep, ep_title_parser, get_page
+from utils.parsers import date_and_videos_of_ep, ep_title_parser, get_page
 
 logger = logging.getLogger(__name__)
 
