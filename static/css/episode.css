@@ -49,19 +49,21 @@
 }
 
 .video_reader .command {
-    background-color: var(--back-color);
     position: absolute;
+    display: flex;
     top: 0;
     bottom: 0;
-    display: flex;
     width: 5vw;
+
+    background-color: var(--back-color);
+    filter: brightness(140%);
+    opacity: 0;
 }
 
 .video_reader .command:hover {
-    filter: brightness(140%);
+    opacity: 100%;
     transition: var(--universal-transition);
 }
-
 
 .video_reader .command.previous {
     left: calc(-5vw - 1px);
