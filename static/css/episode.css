@@ -58,7 +58,7 @@
 }
 
 .video_reader .command:hover {
-    filter: brightness(--universal-hover-brightness);
+    filter: brightness(140%);
     transition: var(--universal-transition);
 }
 

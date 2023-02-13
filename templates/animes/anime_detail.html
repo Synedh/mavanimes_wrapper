@@ -32,14 +32,14 @@
                     Saison{{ seasons|pluralize:"s" }}: {{ seasons }}
                 </li>
                 <li>
-                    Episode{{ anime.episodes.count|pluralize:"s" }}: {{ anime.episodes.count }}
+                    Épisode{{ anime.episodes.count|pluralize:"s" }}: {{ anime.episodes.count }}
                 </li>
             </ul>
             <p class="description">{{ anime.description|linebreaks }}</p>
         </div>
         <div class="episodes_lists">
             <h1>
-                Episodes
+                Épisodes
             </h1>
             <div class="episodes_container">
             {% for version, seasons_list in versions.items %}

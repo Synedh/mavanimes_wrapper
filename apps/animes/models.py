@@ -67,7 +67,7 @@ class Anime(models.Model):
 
 class Episode(models.Model):
     class Type(models.TextChoices):
-        EPISODE = 'EPISODE'
+        EPISODE = 'ÉPISODE'
         FILM = 'FILM'
         OAV = 'OAV'
         SPECIAL = 'SPECIAL'

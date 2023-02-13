@@ -24,7 +24,7 @@
                     <span>
                         {{ anime.episodes_count }}
                     </span>
-                    episode{{ anime.episodes_count|pluralize:"s" }}
+                    épisode{{ anime.episodes_count|pluralize:"s" }}
                 </div>
                 <div class="versions">
                 {% for version in anime.versions|split:"," %}
