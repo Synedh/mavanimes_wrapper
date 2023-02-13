@@ -68,7 +68,6 @@
 .video_reader .command.previous {
     left: calc(-5vw - 1px);
     border-radius: 9999px 0 0 9999px;
-    justify-content: right;
 }
 
 .video_reader .command.next {

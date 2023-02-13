@@ -15,28 +15,14 @@
             {% endif %}
         </div>
         <div class="infos">
-            <div class="name">
-                {{ episode.anime.name }}
-            </div>
+            <span class="name">{{ episode.anime.name }}</span>
             <div class="description">
-                <div class="episode">
-                    {{ episode.type|title }}
-                    {% if episode.number %}
-                    <span>
-                        {{ episode.number|numberformat }}
-                    </span>
-                    {% endif %}
-                </div>
+                <span class="episode">{{ episode.type|title }} {% if episode.number %}{{ episode.number|numberformat }}{% endif %}</span>
                 {% if episode.season > 1 %}
-                <div class="season">
-                    <span class="logo_small">S.</span>
-                    <span class="logo_large">Saison</span>
-                    <span>{{ episode.season }}</span>
-                </div>
+                <span class="season logo_small">S. {{ episode.season }}</span>
+                <span class="season logo_large">Saison {{ episode.season }}</span>
                 {% endif %}
-                <div class="version">
-                    {{ episode.version }}
-                </div>
+                <span class="version">{{ episode.version }}</span>
             </div>
         </div>
     </a>

@@ -115,6 +115,8 @@ header .logo {
     font-variant: small-caps;
     font-weight: 600;
     user-select: none;
+    display: flex;
+    align-items: baseline;
 }
 
 header .logo .mav {

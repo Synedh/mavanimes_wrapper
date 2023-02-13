@@ -16,8 +16,7 @@
         <input id="search_input" type="text" placeholder="Rechercher" value="{{ request.GET.search }}" onkeyup="event.keyCode === 13 && send(this.value)">
         {% for tag in search_tags %}
         <a href="{% urlparams page='1' search=request.GET.search tags=request.GET.tags|exclude:tag.name %}" class="tag" style="background-color: {{ tag.color }}" title="Retirer le tag">
-            <span>{{ tag.name }}</span>
-            <span>x</span>
+            <span>{{ tag.name }} x</span>
         </a>
         {% endfor %}
     </div>

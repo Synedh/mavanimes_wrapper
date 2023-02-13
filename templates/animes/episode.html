@@ -15,7 +15,7 @@
         <div class="buttons">
             <div class="tabs">
             {% for video_url in episode.video_urls.all %}
-                <div class="tab_button" onclick="selectVideo({{ forloop.counter0 }})">
+                <div class="tab_button {% if forloop.first %}selected{% endif %}" onclick="selectVideo({{ forloop.counter0 }})">
                     {{ video_url.source|upper }}
                 </div>
             {% endfor %}
@@ -24,10 +24,10 @@
                 <a class="tab_button" href="{% url 'animes:anime_detail' episode.anime.slug %}" title="Aller vers l'anime">
                     ANIME
                 </a>
+                {% if user.is_superuser %}
                 <a class="tab_button" href="{{ episode.mav_url }}" target="blank" rel="noreferrer noopener" title="Ouvrir dans mavanimes">
                     MAV
                 </a>
-                {% if user.is_superuser %}
                 <div class="tab_button" title="Remonter une erreur" onclick="reportIssue({{ anime.id }})">
                     !
                 </div>
@@ -55,7 +55,7 @@
         </a>
         {% endif %}
         {% for video_url in episode.video_urls.all %}
-            <div id="video_{{ video_url.source }}" class="video">
+            <div id="video_{{ video_url.source }}" class="video {% if not forloop.first %}hidden{% endif %}">
                 <iframe src="{{ video_url.url }}" frameborder="0" allowfullscreen></iframe>
             </div>
         {% endfor %}
@@ -65,7 +65,7 @@
 {% endblock %}
 
 {% block footer %}
-<script lang="js">
+<script>
     const tabs = document.querySelectorAll('.tab_button');
     const videos = document.querySelectorAll('.video');
 
@@ -80,7 +80,7 @@
             }
         }
     }
-
+    {% if user.is_superuser %}
     async function sendReload(id) {
         const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         const test = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
@@ -91,7 +91,6 @@
         const msg = prompt('Quel est l\'erreur rencontrée ?', 'Test');
         console.log(msg);
     }
-
-    selectVideo(0);
+    {% endif %}
 </script>
 {% endblock %}

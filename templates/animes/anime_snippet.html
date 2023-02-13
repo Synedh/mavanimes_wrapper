@@ -16,21 +16,12 @@
             {% endif %}
         </div>
         <div class="infos">
-            <div class="name">
-                {{ anime.name }}
-            </div>
+            <span class="name">{{ anime.name }}</span>
             <div class="description">
-                <div class="episode">
-                    <span>
-                        {{ anime.episodes_count }}
-                    </span>
-                    épisode{{ anime.episodes_count|pluralize:"s" }}
-                </div>
+                <span class="episode">{{ anime.episodes_count }} épisode{{ anime.episodes_count|pluralize:"s" }}</span>
                 <div class="versions">
                 {% for version in anime.versions|split:"," %}
-                    <div>
-                        {{ version }}
-                    </div>
+                    <span>{{ version }}</span>
                 {% endfor  %}
                 </div>
             </div>
