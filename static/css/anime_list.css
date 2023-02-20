@@ -4,10 +4,17 @@
     margin-bottom: 20px;
 }
 
+.head_box .tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    max-width: 50vw;
+}
+
 .head_box .tag {
     border-radius: 9999px;
     padding: 2px 8px;
-    margin: 0 3px;
+    margin: 3px;
 }
 
 .head_box .tag:hover {
@@ -21,6 +28,50 @@
     background-clip: text;
     color: transparent;
     filter: invert(1) grayscale(1) contrast(100);
+}
+
+.head_box .add_tag {
+    background-color: var(--secondary-back-color);
+}
+
+.head_box .add_tag:hover {
+    filter: brightness(160%);
+    cursor: pointer;
+}
+
+.head_box input:checked ~ label {
+    filter: brightness(140%);
+}
+
+.head_box input:checked ~ .taglist {
+    display: block !important;
+}
+
+.head_box .taglist {
+    position: absolute;
+    background: var(--back-color);
+    left: 0;
+    top: 20px;
+    z-index: 100;
+    max-height: 50vh;
+    box-shadow: var(--generic-box-shadow);
+    overflow: auto;
+}
+
+.head_box .taglist > * {
+    display: block;
+    background: var(--back-color);
+    color: var(--fore-color);
+    padding: 8px;
+    margin: 0 8px;
+}
+
+.head_box .taglist > span {
+    opacity: 0.4;
+}
+
+.head_box .taglist > a:hover {
+    filter: brightness(140%);
 }
 
 #search_input {
@@ -50,7 +101,7 @@
 .anime_snippet .tag {
     font-size: small;
     padding: 0 3px;
-    margin: 2px;
+    margin: 2px 4px;
 }
 
 .anime_snippet .tag span {

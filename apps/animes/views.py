@@ -41,10 +41,16 @@ def anime_list(request):
     animes = Anime.objects.filter(name__icontains=search)
     for tag in tags:
         animes = animes.filter(tags=tag)
-    paginator = Paginator(animes, limit)
+
+    if tag_names == ['']:
+        animes_tags = Tag.objects.all()
+    else:
+        animes_tags = Tag.objects.filter(animes__in=animes).distinct()
+
     context = {
-        'animes': paginator.get_page(page),
-        'search_tags': tags
+        'animes': Paginator(animes, limit).get_page(page),
+        'search_tags': tags,
+        'tags': animes_tags
     }
     return render(request, 'animes/anime_list.html', context)
 

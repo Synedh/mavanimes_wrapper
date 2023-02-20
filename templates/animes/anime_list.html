@@ -1,5 +1,7 @@
 {% extends "overall.html" %}
+{% load append %}
 {% load exclude %}
+{% load split %}
 {% load urlparams %}
 
 {% block title %}Animes - {{ block.super }}{% endblock %}
@@ -14,11 +16,26 @@
     <div class="head_box">
         <h1>Animes</h1>
         <input id="search_input" type="text" placeholder="Rechercher" value="{{ request.GET.search }}" onkeyup="event.keyCode === 13 && send(this.value)">
+        <div class="tags">
         {% for tag in search_tags %}
-        <a href="{% urlparams page='1' search=request.GET.search tags=request.GET.tags|exclude:tag.name %}" class="tag" style="background-color: {{ tag.color }}" title="Retirer le tag">
-            <span>{{ tag.name }} x</span>
-        </a>
+            <a href="{% urlparams page='1' search=request.GET.search tags=request.GET.tags|exclude:tag.name %}" class="tag" style="background-color: {{ tag.color }}" title="Retirer le tag">
+                <span>{{ tag.name }} x</span>
+            </a>
         {% endfor %}
+            <div style="position: relative">
+                <input id="add_tag_checkbox" class="hidden" type="checkbox" />
+                <label class="add_tag tag" for="add_tag_checkbox" >+</label>
+                <div class="taglist hidden">
+                {% for tag in tags %}
+                    {% if tag.name in request.GET.tags|split:',' %}
+                    <span>{{ tag.name }}</span>
+                    {% else %}
+                    <a href="{% urlparams search=request.GET.search tags=request.GET.tags|append:tag.name %}">{{ tag.name }}</a>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
     <div class="anime_list">
         {% for anime in animes %}
@@ -53,7 +70,7 @@
 const tags = '{{ request.GET.tags }}';
 
 function send (search) {
-    window.location = `?search=${search}${ tags.length ? `&${tags}` : '' }`;
+    window.location = `?search=${search}${ tags.length ? `&tags=${tags}` : '' }`;
 }
 </script>
 {% endblock %}

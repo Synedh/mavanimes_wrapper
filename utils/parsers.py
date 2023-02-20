@@ -3,7 +3,6 @@ import re
 from html import unescape
 
 import dateutil.parser
-import requests
 
 from apps.animes.models import Episode
 from utils.mav_requests import get_page
