@@ -86,7 +86,6 @@ def anime_detail(request, slug):
 
 def episode_detail(request, anime_slug, episode_slug):
     episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
-    episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
     episode_index = list(episode.anime.episodes.all()).index(episode)
 
     previous_ep, next_ep = None, None

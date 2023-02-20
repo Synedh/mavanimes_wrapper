@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'colorfield',
     'mavanimes_wrapper',
     'apps.animes',
+    'apps.sources',
     'apps.api'
 ]
 

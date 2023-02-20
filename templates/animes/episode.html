@@ -55,7 +55,7 @@
         </a>
         {% endif %}
         {% for video_url in episode.video_urls.all %}
-            <div id="video_{{ video_url.source }}" class="video {% if not forloop.first %}hidden{% endif %}">
+            <div id="video_{{ video_url.source }}" class="video {% if not forloop.first %}hidden{% endif %}" data-source="{{ video_url.source }}" data-url="{{ video_url.url }}">
                 <iframe src="{{ video_url.url }}" frameborder="0" allowfullscreen></iframe>
             </div>
         {% endfor %}
@@ -91,6 +91,18 @@
         const msg = prompt('Quel est l\'erreur rencontrée ?', 'Test');
         console.log(msg);
     }
+
+    async function setVideos() {
+        for (const video of videos) {
+            const response = await fetch(`/sources/${video.dataset.source}?url=${video.dataset.url}`);
+            if (response.ok) {
+                const src = await response.text();
+                console.log(src);
+            }
+        }
+    }
+
+    setVideos();
     {% endif %}
 </script>
 {% endblock %}

@@ -1,11 +1,13 @@
+from datetime import datetime
+
+import colorfield.fields
+
 from django.utils import timezone
 from django.contrib import admin
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-import colorfield.fields
-
-from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 class Tag(models.Model):
     name = models.CharField(max_length=1024)
@@ -55,6 +57,12 @@ class Anime(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('anime', kwargs={'slug': self.slug})
 
+    def get_images(self, key=None):
+        try:
+            return self.images.get(key=key)
+        except ObjectDoesNotExist:
+            return self.images.first()
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
@@ -63,6 +71,18 @@ class Anime(models.Model):
         ordering = ['name']
         verbose_name = 'Anime'
         verbose_name_plural = 'Animes'
+
+
+class AnimeImage(models.Model):
+    image = models.URLField(blank=True, null=True, default=None)
+    small_image = models.URLField(blank=True, null=True, default=None)
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE, related_name='images')
+    key = models.CharField(max_length=128, blank=True, null=True, default=None)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['anime', 'key'], name='unique_anime_key')
+        ]
 
 
 class Episode(models.Model):
