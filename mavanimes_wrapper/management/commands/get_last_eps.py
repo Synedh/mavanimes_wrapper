@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import List, Tuple
 import xml.etree.ElementTree
 
 import dateutil.parser
@@ -7,16 +8,17 @@ from django.core.management.base import BaseCommand
 
 from apps.animes.models import Anime, Episode, VideoURL, AnimeImage
 from utils.parsers import ep_title_parser, get_page
+from utils.utils import EpisodeDTO
 
 logger = logging.getLogger(__name__)
 URL = 'http://www.mavanimes.co/'
 
 
-def get_anime_images(anime, homepage):
+def get_anime_images(anime: Anime, homepage: str) -> Tuple[str]:
     res = re.search(rf'<a href="{anime.episodes.last().mav_url}">.*?src="(.*?)".*?srcset=".*?(?:(https?://.*?)\s.*?)+"', homepage, re.DOTALL)
     return res.group(1), res.group(2)
 
-def parse_ep(ep_xml):
+def parse_ep(ep_xml: xml.etree.ElementTree.Element) -> EpisodeDTO:
     name = ep_xml.find('title').text
     date = ep_xml.find('pubDate').text
     link = ep_xml.find('link').text
@@ -24,17 +26,13 @@ def parse_ep(ep_xml):
     episode = ep_title_parser(name)
 
     return {
-        'anime': episode['anime'],
-        'season': episode['season'],
-        'number': episode['number'],
-        'version': episode['version'],
-        'name': name,
+        **episode,
         'video_urls': re.findall(r'iframe\s+src="(.*?)"', content),
         'mav_url': link,
         'pub_date': dateutil.parser.parse(date)
     }
 
-def save_ep(episode_dict, homepage):
+def save_ep(episode_dict: EpisodeDTO, homepage: str) -> Episode:
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
     new_season = episode_dict['season'] not in anime.episodes.values_list('season', flat=True).order_by().distinct()
     video_urls = episode_dict['video_urls']
@@ -66,7 +64,7 @@ def save_ep(episode_dict, homepage):
         logger.info('%s episode %s', "New" if new_episode else "Updated", episode.name)
     return episode
 
-def get_last_eps():
+def get_last_eps() -> List[Episode]:
     feed = xml.etree.ElementTree.fromstring(get_page(f'{URL}feed/'))
     homepage = get_page(URL)
     episodes = [parse_ep(xml_ep) for xml_ep in feed[0].findall('item')]
