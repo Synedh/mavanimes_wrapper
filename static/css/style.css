@@ -167,8 +167,7 @@ header .search form input {
     border-top: none;
     border-left: none;
     border-right: none;
-    margin-top: 0;
-    padding: calc(0.5 * var(--universal-padding)) calc(1.5 * var(--universal-padding));;
+    padding: calc(0.5 * var(--universal-padding)) calc(1 * var(--universal-padding));;
     border-radius: 0;
     outline: none;
 }

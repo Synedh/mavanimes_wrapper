@@ -5,7 +5,7 @@ import xml.etree.ElementTree
 import dateutil.parser
 from django.core.management.base import BaseCommand
 
-from apps.animes.models import Anime, Episode, VideoURL
+from apps.animes.models import Anime, Episode, VideoURL, AnimeImage
 from utils.parsers import ep_title_parser, get_page
 
 logger = logging.getLogger(__name__)
@@ -36,6 +36,7 @@ def parse_ep(ep_xml):
 
 def save_ep(episode_dict, homepage):
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
+    new_season = episode_dict['season'] not in anime.episodes.values_list('season', flat=True).order_by().distinct()
     video_urls = episode_dict['video_urls']
     del episode_dict['video_urls']
     episode_dict['anime'] = anime
@@ -44,11 +45,15 @@ def save_ep(episode_dict, homepage):
         name=episode_dict['name'], anime=anime.id,
         defaults={**episode_dict}
     )
-    if new_anime:
+    if new_anime or new_season:
         image, small_image = get_anime_images(anime, homepage)
-        anime.image = image
-        anime.small_image = small_image
-        anime.save()
+        anime_image = AnimeImage(
+            image=image,
+            small_image=small_image,
+            anime=anime,
+            key=None if new_anime else f's{episode.season}'
+        )
+        anime_image.save()
 
     previous_video_urls = [video_url.url for video_url in episode.video_urls.all()]
     if video_urls != previous_video_urls:
@@ -63,8 +68,9 @@ def save_ep(episode_dict, homepage):
 
 def get_last_eps():
     feed = xml.etree.ElementTree.fromstring(get_page(f'{URL}feed/'))
+    homepage = get_page(URL)
     episodes = [parse_ep(xml_ep) for xml_ep in feed[0].findall('item')]
-    return [save_ep(episode, get_page(URL)) for episode in episodes]
+    return [save_ep(episode, homepage) for episode in episodes]
 
 class Command(BaseCommand):
     help = 'Get last mavanimes episodes'

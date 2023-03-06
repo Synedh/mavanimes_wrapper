@@ -1,16 +1,21 @@
 from django.contrib import admin
 
-from .models import Tag, Anime, Episode, VideoURL
+from .models import Tag, Anime, AnimeImage, Episode, VideoURL
 
 class EpisodeInline(admin.StackedInline):
     model = Episode
     extra = 0
+    show_change_link = True
     fields = ('name', 'type', 'number', 'season', 'version', 'pub_date', 'mav_url')
 
 class VideoURLInline(admin.TabularInline):
     model = VideoURL
     extra = 0
     fields = ('url',)
+
+class AnimeImageInline(admin.TabularInline):
+    model = AnimeImage
+    extra = 0
 
 class AnimeAdmin(admin.ModelAdmin):
     list_display = ('name', 'episodes_count', 'update_date')
@@ -20,7 +25,7 @@ class AnimeAdmin(admin.ModelAdmin):
               'update_date', 'mav_url', 'episodes_count')
     readonly_fields = ('update_date', 'episodes_count')
     autocomplete_fields = ('tags',)
-    inlines = [EpisodeInline]
+    inlines = [AnimeImageInline, EpisodeInline]
 
 
 class EpisodeAdmin(admin.ModelAdmin):
@@ -29,6 +34,8 @@ class EpisodeAdmin(admin.ModelAdmin):
     ordering = ('name', 'pub_date')
     fields = ('name', 'anime', 'type', 'number', 'season', 'version', 'pub_date', 'mav_url')
     inlines = [VideoURLInline]
+
+# class AnimeImage(admim)
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('url', 'source')

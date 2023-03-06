@@ -11,18 +11,19 @@ logger = logging.getLogger(__name__)
 
 def ep_title_parser(ep_name):
     ep_name = unescape(ep_name)
-    season = next(iter(re.findall(r'saison?\s?(\d+)', ep_name, flags=re.IGNORECASE)), 1)
-    ep_name = re.sub(r'(\(\s*)?saison?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
+    season_list = re.findall(r'saison?\s?(\d+)', ep_name, flags=re.IGNORECASE)
+    if season_list:
+        ep_name = re.sub(r'(\(\s*)?saison?\s*\d+(\s*\))?', '', ep_name, flags=re.IGNORECASE)
 
     version = next(iter(re.findall(r'\W((?:VF)|(?:VOSTFR))', ep_name, re.IGNORECASE)), None)
     if version:
         ep_name = re.sub(version, '', ep_name)
 
     try:
-        number = re.search(r'^.*?((?:\d*\.)?\d+)\D*$', ep_name).group(1)
+        number = float(re.search(r'^.*?((?:\d*\.)?\d+)\D*$', ep_name).group(1))
         ep_name = re.sub(r'^(.*?)(?:\d*\.)?\d+(\D*)$', r'\1\2', ep_name)
     except AttributeError:
-        number = '0'
+        number = 0.0
 
     episode_type = Episode.Type.EPISODE
     splitted_name = ep_name.lower().split()
@@ -33,10 +34,16 @@ def ep_title_parser(ep_name):
     elif 'oav' in splitted_name or 'ova' in splitted_name or 'OAV-' in ep_name:
         episode_type = Episode.Type.OAV
 
+    anime = re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', ep_name).group(1)
+    if not season_list and (groups := re.search(r'\s+(\d+)$', anime)) and (season := int(groups.group())) < 21:
+        anime = re.sub(r'\s+\d+$', '', anime)
+    else:
+        season = int(next(iter(season_list), 1))
+
     return {
-        'anime': re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', ep_name).group(1),
-        'season': int(season),
-        'number': float(number),
+        'anime': anime,
+        'season': season,
+        'number': number,
         'type': episode_type,
         'version': version
     }

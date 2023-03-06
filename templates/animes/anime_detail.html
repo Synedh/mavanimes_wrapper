@@ -13,10 +13,29 @@
 <div class="anime">
     <h1 class="anime_name">
         {{ anime.name }}
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:animes_anime_change' anime.id %}" class="to_admin" title="Ouvrir dans l'admin">
+            @
+        </a>
+        {% endif %}
     </h1>
     <div class="content">
         <div class="anime_detail">
-            <img src="https://wsrv.nl/?url={{ anime.image }}" />
+            <div class="slideshow">
+                {% for images in anime.images.all %}
+                <img {% if not forloop.first %}class="hidden" {% endif %}src="https://wsrv.nl/?url={{ images.image }}" />
+                {% endfor %}
+                <a class="previous hidden">
+                    <span onclick="slideShow(-1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.71 15.88L10.83 12l3.88-3.88a.996.996 0 1 0-1.41-1.41L8.71 11.3a.996.996 0 0 0 0 1.41l4.59 4.59c.39.39 1.02.39 1.41 0c.38-.39.39-1.03 0-1.42z"/></svg>
+                    </span>
+                </a>
+                <a class="next{% if anime.images.count < 2 %} hidden{% endif %}">
+                    <span onclick="slideShow(1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
+                    </span>
+                </a>
+            </div>
             <div class="tags">
             {% for tag in anime.tags.all %}
                 <a class="tag shadowed rounded" href="{% url 'animes:anime_list' %}{% urlparams tags=tag.name %}" style="background-color:{{ tag.color }}">
@@ -26,13 +45,16 @@
             </div>
             <ul>
                 <li>
-                    Version{{ anime.versions|split:","|length|pluralize:"s" }}: {{ anime.versions }}
+                    Version{{ anime.versions|split:","|length|pluralize:"s" }} : {{ anime.versions }}
                 </li>
                 <li>
-                    Saison{{ seasons|pluralize:"s" }}: {{ seasons }}
+                    Saison{{ seasons|pluralize:"s" }} : {{ seasons }}
                 </li>
                 <li>
-                    Épisode{{ anime.episodes.count|pluralize:"s" }}: {{ anime.episodes.count }}
+                    Épisode{{ anime.episodes.count|pluralize:"s" }} : {{ anime.episodes.count }}
+                </li>
+                <li>
+                    Ajouté : {{ anime.episodes.first.pub_date|date:"F Y"|title }}{% if anime.episodes.first.pub_date|date:"F Y" != anime.episodes.last.pub_date|date:"F Y" %} - {{ anime.episodes.last.pub_date|date:"F Y"|title }}{% endif %}
                 </li>
             </ul>
             <p class="description">{{ anime.description|linebreaks }}</p>
@@ -76,6 +98,11 @@
 
 {% block footer %}
 <script>
+    let imageIndex = 0;
+    const images = document.querySelectorAll('.slideshow img')
+    const previous = document.querySelector('.previous');
+    const next = document.querySelector('.next');
+
     const seasons = document.querySelectorAll('.season');
     const episodes = document.querySelectorAll('.episodes');
 
@@ -88,6 +115,27 @@
                 seasons[i].classList.remove('selected');
                 episode_list.classList.add('toggled_off');
             }
+        }
+    }
+
+    function slideShow(n) {
+        imageIndex += n;
+        for (const [i, image] of images.entries()) {
+            if (i === imageIndex) {
+                image.classList.remove('hidden');
+            } else {
+                image.classList.add('hidden');
+            }
+        }
+        if (imageIndex === 0) {
+            previous.classList.add('hidden');
+        } else {
+            previous.classList.remove('hidden');
+        }
+        if (imageIndex === images.length - 1) {
+            next.classList.add('hidden');
+        } else {
+            next.classList.remove('hidden');
         }
     }
 </script>

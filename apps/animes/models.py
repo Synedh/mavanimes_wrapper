@@ -5,6 +5,7 @@ import colorfield.fields
 from django.utils import timezone
 from django.contrib import admin
 from django.db import models
+from django.db.models.functions import Upper
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -55,7 +56,7 @@ class Anime(models.Model):
         return self.name
 
     def get_absolute_url(self) -> str:
-        return reverse('anime', kwargs={'slug': self.slug})
+        return reverse('animes:anime_detail', kwargs={'slug': self.slug})
 
     def get_images(self, key=None):
         try:
@@ -68,7 +69,7 @@ class Anime(models.Model):
         return super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ['name']
+        ordering = [Upper('name')]
         verbose_name = 'Anime'
         verbose_name_plural = 'Animes'
 
@@ -80,6 +81,7 @@ class AnimeImage(models.Model):
     key = models.CharField(max_length=128, blank=True, null=True, default=None)
 
     class Meta:
+        ordering = ['key']
         constraints = [
             models.UniqueConstraint(fields=['anime', 'key'], name='unique_anime_key')
         ]
@@ -87,7 +89,7 @@ class AnimeImage(models.Model):
 
 class Episode(models.Model):
     class Type(models.TextChoices):
-        EPISODE = 'ÉPISODE'
+        EPISODE = 'EPISODE'
         FILM = 'FILM'
         OAV = 'OAV'
         SPECIAL = 'SPECIAL'
@@ -102,6 +104,15 @@ class Episode(models.Model):
     pub_date = models.DateTimeField(blank=True, default=datetime(1970, 1, 1, tzinfo=timezone.get_current_timezone()))
     mav_url = models.URLField()
 
+    def image(self):
+        key = f's{self.season}'
+        if self.type != self.Type.EPISODE:
+            key = f'{self.type.lower()}{self.number}'
+        images = self.anime.get_images(key)
+        if not images:
+            return None
+        return images.small_image if images.small_image else images.image
+
     def save(self, *args, **kwargs):
         self.slug = f'{self.type.lower()}-{self.season}-{self.number:g}'
         super().save(*args, **kwargs)
@@ -111,7 +122,13 @@ class Episode(models.Model):
         self.anime.save()
 
     def get_absolute_url(self) -> str:
-        return reverse('episode', kwargs={'slug': self.slug})
+        return reverse(
+            'animes:episode',
+            kwargs={
+                'anime_slug': self.anime.slug,
+                'episode_slug': self.slug
+            }
+        )
 
     def __str__(self) -> str:
         return self.name

@@ -16,9 +16,36 @@ li {
     margin-right: 20px;
 }
 
-.anime_detail img {
-    display: block;
+.anime_detail .slideshow {
+    position: relative;
+    border: 1px solid;
     margin: 10px auto;
+    width: fit-content;
+    display: flex;
+}
+
+.anime_detail .slideshow svg {
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 32px;
+}
+
+.anime_detail .slideshow svg:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+
+.anime_detail .slideshow .previous,
+.anime_detail .slideshow .next {
+    position: absolute;
+    width: 32px;
+    height: 100%;
+    top: 0;
+    display: flex;
+    align-items: center;
+}
+
+.anime_detail .slideshow .next {
+    right: 0;
 }
 
 .anime_detail .tags {
