@@ -114,7 +114,7 @@ class Episode(models.Model):
         return images.small_image if images.small_image else images.image
 
     def save(self, *args, **kwargs):
-        self.slug = f'{self.type.lower()}-{self.season}-{self.number:g}'
+        self.slug = f'{self.version.lower()}-{self.type.lower()}-{self.season}-{self.number:g}'
         super().save(*args, **kwargs)
         anime_versions = set(self.anime.versions.split(',')) | set([self.version])
         self.anime.versions = ','.join(sorted(v for v in list(anime_versions) if v))
@@ -148,7 +148,7 @@ class VideoURL(models.Model):
         return f'{self.source} - {self.url}'
 
     def save(self, *args, **kwargs):
-        self.source = self.url.split('.', maxsplit=1)[0].split('/')[-1]
+        self.source = self.url.split('.')[-2].split('/')[-1]
         return super().save(*args, **kwargs)
 
     class Meta:

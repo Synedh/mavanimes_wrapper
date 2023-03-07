@@ -71,13 +71,13 @@
                     </div>
                     <div class="seasons">
                     {% for season in seasons_list %}
-                        {% if seasons_list|length > 1 %}
-                        <div class="season {% if forloop.first %}selected{% endif %}" onclick="displaySeason({{ forloop.counter0 }})">
+                        {% if versions|length > 1 or seasons_list|length > 1%}
+                        <div id="{{ version }}-{{ forloop.counter0 }}" class="season{% if forloop.parentloop.first and forloop.first %} selected{% endif %}" onclick="displaySeason('{{ version }}-{{ forloop.counter0 }}')">
                             <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
                             {{ season.name }}
                         </div>
                         {% endif %}
-                        <ul class="episodes {% if not forloop.first %}toggled_off{% endif %}">
+                        <ul class="episodes{% if not forloop.parentloop.first or not forloop.first %} toggled_off{% endif %}">
                         {% for episode in season.values %}
                             <li class="episode">
                                 <a href="{% url 'animes:episode' anime_slug=anime.slug episode_slug=episode.slug %}">
@@ -107,13 +107,13 @@
     const episodes = document.querySelectorAll('.episodes');
 
     function displaySeason(id) {
-        for (const [i, episode_list] of episodes.entries()) {
-            if (i === id) {
-                seasons[i].classList.toggle('selected');
-                episode_list.classList.toggle('toggled_off');
+        for (const [i, season] of seasons.entries()) {
+            if (season.id === id) {
+                season.classList.toggle('selected');
+                episodes[i].classList.toggle('toggled_off');
             } else {
-                seasons[i].classList.remove('selected');
-                episode_list.classList.add('toggled_off');
+                season.classList.remove('selected');
+                episodes[i].classList.add('toggled_off');
             }
         }
     }

@@ -35,21 +35,18 @@ def save_ep(episode_dict: EpisodeDTO) -> Episode:
     logger.info('%s episode %s', "New" if new_episode else "Updated", episode.name)
     return episode
 
-def get_episode(url: str) -> Union[Episode, None]:
-    try:
-        return parse_ep(url)
-    except Exception as err:
-        logger.error(err)
-        return None
+def get_episode(url: str) -> Episode:
+    episode = parse_ep(url)
+    return save_ep(episode)
 
-def anime_from_ep(url: str) -> List[Union[Episode, None]]:
+def anime_from_ep(url: str) -> List[Episode]:
     ep_html = get_page(url)
     ep_urls = re.findall(r'<option[^>]*value="(\S+)"', ep_html)
     return [get_episode(ep_url) for ep_url in ep_urls[::-1]]
 
 
 class Command(BaseCommand):
-    help = 'Get last mavanimes episodes'
+    help = 'Get mavanimes episode'
 
     def add_arguments(self, parser):
         parser.add_argument('-p', '--previous', type=bool, help='Add previous episodes too')

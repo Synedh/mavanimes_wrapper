@@ -77,7 +77,7 @@ def parse_ep(url: str) -> EpisodeDTO:
     )), None)
     return {
         **ep_title_parser(schema['@graph'][2]['headline']),
-        'image': schema['@graph'][1]['image']['url'],
+        'image': schema['@graph'][1].get('image', {}).get('url', None),
         'pub_date': dateutil.parser.parse(pub_date) if pub_date else None,
         'video_urls': re.findall(r'iframe.+?src="(.*?)"', episode_html)[:-1],
         'mav_url': url
