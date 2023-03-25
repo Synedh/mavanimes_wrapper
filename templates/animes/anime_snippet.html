@@ -20,9 +20,7 @@
             <div class="description">
                 <span class="episode">{{ anime.episodes_count }} épisode{{ anime.episodes_count|pluralize:"s" }}</span>
                 <div class="versions">
-                {% for version in anime.versions|split:"," %}
-                    <span>{{ version }}</span>
-                {% endfor  %}
+                    <span>{{ anime.versions|split:","|join:", " }}</span>
                 </div>
             </div>
             {% comment %} <div class="tags">

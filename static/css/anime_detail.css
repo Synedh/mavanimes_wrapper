@@ -114,7 +114,7 @@ li {
 
 .episodes {
     margin: 0;
-    max-height: 100vh;
+    max-height: 9999px;
     transition: all 0.4s linear;
 }
 

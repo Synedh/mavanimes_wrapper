@@ -1,10 +1,10 @@
 import logging
 import re
-from typing import List, Union
+from typing import List
 
 from django.core.management.base import BaseCommand
 
-from apps.animes.models import Anime, Episode, VideoURL
+from apps.animes.models import Anime, AnimeImage, Episode, VideoURL
 from utils.parsers import get_page, parse_ep
 from utils.utils import EpisodeDTO
 
@@ -12,15 +12,28 @@ logger = logging.getLogger(__name__)
 
 def save_ep(episode_dict: EpisodeDTO) -> Episode:
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
+    new_season = episode_dict['season'] not in anime.episodes.values_list('season', flat=True).order_by().distinct()
     video_urls = episode_dict['video_urls']
+    image = episode_dict['image']
+
     del episode_dict['video_urls']
+    del episode_dict['image']
     episode_dict['anime'] = anime
 
-    if new_anime:
-        logger.info('New anime %s', anime.name)
+    if new_anime or new_season:
+        logger.info('New %s: %s', 'season' if new_season else 'anime', anime.name)
+        anime_image = AnimeImage(
+            image=image,
+            small_image=None,
+            anime=anime,
+            key=None if new_anime else f's{episode.season}'
+        )
+        anime_image.save()
 
     episode, new_episode = Episode.objects.update_or_create(
-        name=episode_dict['name'], anime=anime.id,
+        name=episode_dict['name'],
+        anime=anime.id,
+        version=episode_dict['version'],
         defaults={**episode_dict}
     )
 
@@ -49,8 +62,8 @@ class Command(BaseCommand):
     help = 'Get mavanimes episode'
 
     def add_arguments(self, parser):
+        parser.add_argument('url', type=str, help='Episode url')
         parser.add_argument('-p', '--previous', type=bool, help='Add previous episodes too')
-        parser.add_argument('-u', '--url', type=str, help='Episode url')
 
     def handle(self, *args, **options):
         if options['previous']:

@@ -148,7 +148,7 @@ class VideoURL(models.Model):
         return f'{self.source} - {self.url}'
 
     def save(self, *args, **kwargs):
-        self.source = self.url.split('.')[-2].split('/')[-1]
+        self.source = self.url.split('/')[2].split('.')[-2]
         return super().save(*args, **kwargs)
 
     class Meta:

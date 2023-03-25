@@ -11,7 +11,9 @@ from .models import Anime, Episode, Tag, VideoURL
 
 
 def index(request):
-    seven_days_ago = timezone.make_aware(datetime(*(timezone.now().date() - timedelta(days=7)).timetuple()[:6]))
+    seven_days_ago = timezone.make_aware(datetime.fromordinal(
+        (timezone.now() - timedelta(days=7)).date().toordinal()
+    ))
     episodes = (
         Episode.objects.filter(pub_date__gte=seven_days_ago)
                        .order_by('pub_date')
@@ -73,7 +75,7 @@ def anime_detail(request, slug):
             'name': ep_type,
             'values': val
         } for ep_type, val in values.items()],
-        key=lambda season: ('0' if season["name"][0] == 'S' else '') + season["name"])
+        key=lambda season: f'0{season["name"]}' if season['name'][0] == 'S' else season['name'])
         for version, values in versions.items()
     }
 

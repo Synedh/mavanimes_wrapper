@@ -49,7 +49,7 @@ def ep_title_parser(ep_name):
         'season': season,
         'number': number,
         'type': episode_type,
-        'version': version
+        'version': version.upper()
     }
 
 def date_and_videos_of_ep(url: str):

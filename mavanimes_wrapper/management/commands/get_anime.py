@@ -4,6 +4,7 @@ from typing import List
 from html import unescape
 from html.parser import HTMLParser
 
+from django.db import IntegrityError
 from django.core.management.base import BaseCommand
 
 from apps.animes.models import Anime, Episode, AnimeImage, Tag
@@ -108,13 +109,16 @@ def get_anime(url: str) -> Anime:
         anime.tags.add(*[Tag.objects.get_or_create(name=tag)[0] for tag in anime_dict['tags']])
     if not anime.mav_url:
         anime.mav_url = url
-    anime.save()
-    _, _ = AnimeImage.objects.get_or_create(
-        image=anime_dict['image'],
-        small_image=anime_dict['small_image'],
-        anime=anime,
-        key=f's{episodes[0].season}'
-    )
+    try:
+        anime.save()
+        _, _ = AnimeImage.objects.get_or_create(
+            image=anime_dict['image'],
+            small_image=anime_dict['small_image'],
+            anime=anime,
+            key=f's{episodes[0].season}'
+        )
+    except IntegrityError:
+        pass
     return anime
 
 
