@@ -14,10 +14,9 @@ def save_ep(episode_dict: EpisodeDTO) -> Episode:
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
     new_season = episode_dict['season'] not in anime.episodes.values_list('season', flat=True).order_by().distinct()
     video_urls = episode_dict['video_urls']
-    image = episode_dict['image']
-
     del episode_dict['video_urls']
-    del episode_dict['image']
+    if image := episode_dict.get('image'):
+        del episode_dict['image']
     episode_dict['anime'] = anime
 
     if new_anime or new_season:
@@ -26,7 +25,7 @@ def save_ep(episode_dict: EpisodeDTO) -> Episode:
             image=image,
             small_image=None,
             anime=anime,
-            key=None if new_anime else f's{episode.season}'
+            key=None if new_anime else f's{episode_dict["season"]}'
         )
         anime_image.save()
 
