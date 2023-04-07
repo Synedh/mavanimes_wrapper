@@ -16,7 +16,10 @@ URL = 'http://www.mavanimes.co/'
 
 def get_anime_images(anime: Anime, homepage: str) -> Tuple[str]:
     res = re.search(rf'<a href="{anime.episodes.last().mav_url}">.*?src="(.*?)".*?srcset=".*?(?:(https?://.*?)\s.*?)+"', homepage, re.DOTALL)
-    return res.group(1), res.group(2)
+    if res:
+        return res.group(1), res.group(2)
+    logger.warning('No image found for episode %s', anime.episodes.last().name)
+    return None, None
 
 def parse_ep(ep_xml: xml.etree.ElementTree.Element) -> EpisodeDTO:
     name = ep_xml.find('title').text
