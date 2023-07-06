@@ -34,13 +34,14 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     '127.0.0.1',
     'localhost',
-    'dev.synedh.fr'
+    'mavanimes.synedh.fr'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://127.0.0.1',
-    'https://dev.synedh.fr'
+    'http://mavanimes.synedh.fr',
+    'https://mavanimes.synedh.fr'
 ]
 
 # Application definition

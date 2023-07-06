@@ -10,9 +10,12 @@
             <a class="button-icon" href="{% url 'animes:anime_list' %}">
                 Animes
             </a>
+            <a class="button-icon" href="{% url 'movie_list' %}">
+                Films
+            </a>
         </div>
     </div>
-    {% if request.path != '/animes/' %}
+    {% if request.path != '/animes/' and request.path != '/films/' %}
     <div class="search">
         <form action="{% url 'animes:anime_list' %}">
             <svg width="32" height="32" viewBox="0 0 24 24">

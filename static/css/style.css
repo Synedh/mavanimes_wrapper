@@ -69,7 +69,7 @@ a:focus, a:visited, a:hover {
 }
 
 .button-icon {
-    padding: 0 5px !important;
+    padding: 0 10px !important;
     color: var(--button-back-color) !important;
 }
 

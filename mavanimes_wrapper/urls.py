@@ -20,6 +20,7 @@ from apps.animes import views as animes_views
 urlpatterns = [
     path('', animes_views.index, name='index'),
     path('animes/', include('apps.animes.urls')),
+    path('films/', animes_views.movie_list, name='movie_list'),
     path('sources/', include('apps.sources.urls')),
     path('api/', include('apps.api.urls')),
     path('admin/', admin.site.urls),

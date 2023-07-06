@@ -1,0 +1,56 @@
+{% extends "overall.html" %}
+{% load append %}
+{% load exclude %}
+{% load split %}
+{% load urlparams %}
+
+{% block title %}Films - {{ block.super }}{% endblock %}
+
+{% block head %}
+<link href="/static/css/index.css" rel="stylesheet">
+<link href="/static/css/anime_list.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="head_box">
+        <h1>Films</h1>
+        <input id="search_input" type="text" placeholder="Rechercher" value="{{ request.GET.search }}" onkeyup="event.keyCode === 13 && send(this.value)">
+    </div>
+    <div class="anime_list">
+        {% for episode in movies %}
+            {% include "animes/episode_snippet.html" %}
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+    {% if movies.has_previous %}
+        <a href="{% urlparams page='1' search=request.GET.search tags=request.GET.tags %}">&laquo; 1</a>
+        <a href="{% urlparams page=movies.previous_page_number search=request.GET.search tags=request.GET.tags %}">PREC</a>
+    {% else %}
+        <div>&laquo; 1</div>
+        <div>PREC</div>
+    {% endif %}
+
+        <div class="current">{{ movies.number }}</div>
+
+    {% if movies.has_next %}
+        <a href="{% urlparams page=movies.next_page_number search=request.GET.search tags=request.GET.tags %}">SUIV</a>
+        <a href="{% urlparams page=movies.paginator.num_pages search=request.GET.search tags=request.GET.tags %}">{{ movies.paginator.num_pages }} &raquo;</a>
+    {% else %}
+        <div>SUIV</div>
+        <div>{{ movies.paginator.num_pages }} &raquo;</div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script>
+const tags = '{{ request.GET.tags }}';
+
+function send (search) {
+    window.location = `?search=${search}${ tags.length ? `&tags=${tags}` : '' }`;
+}
+</script>
+{% endblock %}

@@ -56,6 +56,17 @@ def anime_list(request):
     }
     return render(request, 'animes/anime_list.html', context)
 
+def movie_list(request):
+    limit = request.GET.get('limit', 100)
+    page = request.GET.get('page')
+    search = request.GET.get('search', '')
+    movies = Episode.objects.filter(name__icontains=search, type=Episode.Type.FILM).order_by('name')
+
+    context = {
+        'movies': Paginator(movies, limit).get_page(page)
+    }
+    return render(request, 'animes/movie_list.html', context)
+
 def anime_detail(request, slug):
     anime = get_object_or_404(Anime, slug=slug)
     versions = {version: defaultdict(list) for version in anime.versions.split(',')}

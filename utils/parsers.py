@@ -34,6 +34,7 @@ def ep_title_parser(ep_name):
         episode_type = Episode.Type.SPECIAL
     elif 'film' in splitted_name or 'movie' in splitted_name:
         episode_type = Episode.Type.FILM
+        parsed_name = re.sub('film|movie', '', parsed_name, re.IGNORECASE)
     elif 'oav' in splitted_name or 'ova' in splitted_name or 'OAV-' in parsed_name:
         episode_type = Episode.Type.OAV
 
