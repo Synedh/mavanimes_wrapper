@@ -1,4 +1,5 @@
 {% extends "overall.html" %}
+{% load static %}
 {% load numberformat %}
 {% load split %}
 {% load urlparams %}
@@ -6,7 +7,7 @@
 {% block title %}{{ anime.name }} - {{ block.super }}{% endblock %}
 
 {% block head %}
-<link href="/static/css/anime_detail.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/anime_detail.css' %}">
 {% endblock %}
 
 {% block content %}

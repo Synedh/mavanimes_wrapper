@@ -62,7 +62,7 @@ class Anime(models.Model):
         try:
             return self.images.get(key=key)
         except ObjectDoesNotExist:
-            return self.images.first()
+            return self.images.first() # pylint: disable=no-member
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -118,6 +118,17 @@ class Episode(models.Model):
         super().save(*args, **kwargs)
         anime_versions = set(self.anime.versions.split(',')) | set([self.version])
         self.anime.versions = ','.join(sorted(v for v in list(anime_versions) if v))
+        self.anime.episodes_count = self.anime.episodes.count()
+        self.anime.save()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.anime.versions = ','.join(
+            self.anime.episodes
+                .values_list('version', flat=True)
+                .order_by('version')
+                .distinct()
+        )
         self.anime.episodes_count = self.anime.episodes.count()
         self.anime.save()
 

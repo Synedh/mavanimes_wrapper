@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -28,8 +30,8 @@
     <link rel="apple-touch-icon-precomposed" href="https://wsrv.nl/?url=http://www.mavanimes.co/wp-content/uploads/2018/03/cropped-mav-180x180.jpg" />
     <meta name="msapplication-TileImage" content="https://wsrv.nl/?url=http://www.mavanimes.co/wp-content/uploads/2018/03/cropped-mav-270x270.jpg" />
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css" rel="stylesheet">
-    <link href="/static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     {% block head %}
     {% endblock %}
 </head>

@@ -7,45 +7,7 @@
 }
 
 .video_reader {
-    margin: 20px;
-}
-
-.video_reader .buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-.video_reader .tabs {
-    display: flex;
-}
-
-.video_reader .tabs .tab_button {
-    background-color: var(--back-color);
-    color: var(--fore-color);
-    font-size: small;
-    font-weight: bold;
-    border-right: 1px solid;
-    border-top: 1px solid;
-    padding: 5px 10px;
-}
-
-.video_reader .tabs .tab_button:first-child {
-    border-left: 1px solid;
-    border-top-left-radius: 5px;
-}
-
-.video_reader .tabs .tab_button:last-child {
-    border-top-right-radius: 5px;
-}
-
-.video_reader .tabs .tab_button:hover {
-    cursor: pointer;
-    filter: brightness(160%);
-    transition: var(--universal-transition);
-}
-
-.video_reader .tabs .tab_button.selected {
-    filter: brightness(140%);
+    margin: 20px 20px 0 20px;
 }
 
 .video_reader .command {
@@ -87,4 +49,78 @@
 .video_reader .videos iframe {
     width: 100%;
     height: 100%;
+}
+
+.video_reader .buttons {
+    display: flex;
+    justify-content: right;
+}
+
+.video_reader .tabs {
+    display: flex;
+}
+
+.video_reader .tabs .tab_button {
+    background-color: var(--back-color);
+    color: var(--fore-color);
+    font-size: small;
+    font-weight: bold;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    padding: 5px 10px;
+}
+
+.video_reader .tabs .tab_button:first-child {
+    border-left: 1px solid;
+    border-bottom-left-radius: 5px;
+}
+
+.video_reader .tabs .tab_button:last-child {
+    border-bottom-right-radius: 5px;
+}
+
+.video_reader .tabs .tab_button:hover {
+    cursor: pointer;
+    filter: brightness(160%);
+    transition: var(--universal-transition);
+}
+
+.video_reader .tabs .tab_button.selected {
+    filter: brightness(140%);
+}
+
+.video_reader .dropdown:hover .dropdown_options {
+    display: block;
+}
+
+.video_reader .dropdown_options {
+    display: none;
+    position: absolute;
+    border-left: 1px solid;
+    border-top: 1px solid;
+
+    bottom: 100%;
+    right: 0;
+
+    overflow: auto;
+    background-color: inherit;
+}
+
+.video_reader .dropdown_options > * {
+    display: block;
+    padding: 5px 10px;
+    font-weight: normal;
+    background-color: var(--back-color);
+    color: var(--fore-color);
+}
+
+.video_reader .dropdown_options > *:hover {
+    cursor: pointer;
+    filter: brightness(160%);
+    transition: var(--universal-transition);
+}
+
+.video_reader .title {
+    margin: 0px;
+    text-align: left;
 }

@@ -1,9 +1,10 @@
 {% extends "overall.html" %}
+{% load static %}
 
 {% block title %}{{ block.super }} | Univers Animes et Manga en Streaming VOSTFR et VF{% endblock %}
 
 {% block head %}
-<link href="/static/css/index.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
 {% endblock %}
 
 {% block content %}
