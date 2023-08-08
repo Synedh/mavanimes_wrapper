@@ -4,11 +4,11 @@ services:
     build: .
     command: bash -c "
         python --version
-        && python manage.py runserver 0.0.0.0:8001 > /var/log/debug.log"
-        # && python manage.py makemigrations
-        # && python manage.py migrate
-        # && python manage.py collectstatic --noinput
-        # && gunicorn --name mavanimes_wrapper --bind 0.0.0.0:8001 --workers 3 --timeout 120 mavanimes_wrapper.wsgi:application --log-file=/var/log/mav/gunicorn.log --access-logfile=/var/log/mav/access.log --capture-output --enable-stdio-inheritance  --log-level=info"
+        && export SECRET_KEY=$(openssl rand 48 | openssl enc -A -base64)
+        && python manage.py makemigrations
+        && python manage.py migrate
+        && python manage.py collectstatic --noinput
+        && gunicorn --name mavanimes_wrapper --bind 0.0.0.0:8001 --workers 3 --timeout 120 mavanimes_wrapper.wsgi:application --log-file=/var/log/mav/gunicorn.log --access-logfile=/var/log/mav/access.log --capture-output --enable-stdio-inheritance  --log-level=info"
     volumes:
       - .:/code
       - ./staticfiles:/opt/static
@@ -16,6 +16,5 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - PROD=False
+      - PROD=True
       - STATIC_ROOT=/opt/static
-      - SECRET_KEY=S0NGAnFWYip1cFYpmUi8ZcMDtKva5b9OnzAQNAz4vcyDu5WHSz6

@@ -16,7 +16,7 @@ class Tag(models.Model):
 
     def save(self, *args, **kwargs):
         hashed = hash(self.name)
-        color = lambda i: (hashed >> i * 8) % 255
+        color = lambda i: (hashed >> i * 8) % 255 # pylint: disable=unnecessary-lambda-assignment
         self.color = f'#{color(0):02x}{color(1):02x}{color(2):02x}'
         return super().save(*args, **kwargs)
 
@@ -101,7 +101,8 @@ class Episode(models.Model):
     number = models.FloatField(blank=True, null=True, default=None)
     season = models.IntegerField(blank=True, default=1)
     version = models.CharField(max_length=128, blank=True, default='VOSTFR')
-    pub_date = models.DateTimeField(blank=True, default=datetime(1970, 1, 1, tzinfo=timezone.get_current_timezone()))
+    pub_date = models.DateTimeField(blank=True,
+        default=datetime(1970, 1, 1, tzinfo=timezone.get_current_timezone()))
     mav_url = models.URLField()
 
     def image(self):
