@@ -18,3 +18,4 @@ services:
     environment:
       - PROD=True
       - STATIC_ROOT=/opt/static
+    restart: unless-stopped
