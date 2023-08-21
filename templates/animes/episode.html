@@ -13,12 +13,12 @@
         <div class="videos">
         {% if previous %}
         <a class="command previous" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}" title="Épisode précédent">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.71 15.88L10.83 12l3.88-3.88a.996.996 0 1 0-1.41-1.41L8.71 11.3a.996.996 0 0 0 0 1.41l4.59 4.59c.39.39 1.02.39 1.41 0c.38-.39.39-1.03 0-1.42z"/></svg>
+            {% include "icons/round-keyboard-arrow-left.html" with size="-1" %}
         </a>
         {% endif %}
         {% if next %}
         <a class="command next" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}" title="Épisode suivant">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
+            {% include "icons/round-keyboard-arrow-right.html" with size="-1" %}
         </a>
         {% endif %}
         {% for video_url in episode.video_urls.all %}
@@ -46,7 +46,11 @@
                     <a href="{{ episode.mav_url }}" target="blank" rel="noreferrer noopener" title="Ouvrir dans mavanimes">Mav</a>
                     {% if user.is_superuser %}
                     <a href="{% url 'admin:animes_episode_change' episode.id %}" title="Ouvrir dans l'admin">Admin</a>
-                    <span onclick="reportIssue({{ anime.id }})" title="Remonter une erreur">Erreur</span>
+                    <span onclick="reportIssue({{ episode.anime.id }})" title="Remonter une erreur">Erreur</span>
+                    <span onclick="toggleSeenEpisode()" title="Marquer comme vu">
+                        Vu
+                        <span class="seen hidden">✔</span>
+                    </span>
                     <span title="Recharger l'épisode" onclick="sendReload({{ anime.id }})">
                         {% csrf_token %}
                         Recharger
@@ -63,11 +67,39 @@
 {% endblock %}
 
 {% block footer %}
-<script>
+<script lang="js" type="module">
+    import { isSeenEpisode, seenEpisode, unseenEpisode } from '{% static "js/user_data.js" %}';
+
+    const anime = '{{ episode.anime.slug }}';
+    const episode = '{{ episode.slug }}';
+    const seen = document.querySelector('.seen');
+    let doesSeenEpisode = isSeenEpisode(anime, episode);
+    if (doesSeenEpisode) {
+        seen.classList.remove('hidden');
+    }
+
+    window.toggleSeenEpisode = () => {
+        if (doesSeenEpisode) {
+            unseenEpisode(anime, episode);
+            seen.classList.add('hidden');
+            doesSeenEpisode = false;
+        } else {
+            seenEpisode(anime, episode);
+            seen.classList.remove('hidden');
+            doesSeenEpisode = true;
+        }
+    }
+
+    setTimeout(() => {
+        console.log('Episode seen !')
+        seenEpisode(anime, episode);
+        seen.classList.remove('hidden');
+        doesSeenEpisode = true;
+    }, 60 * 10 * 1000);
+
     const tabs = document.querySelectorAll('.tab_button');
     const videos = document.querySelectorAll('.video');
-
-    function selectVideo(id) {
+    window.selectVideo = (id) => {
         for (const [i, video] of videos.entries()) {
             if (i === id) {
                 video.classList.remove('hidden');
@@ -79,13 +111,13 @@
         }
     }
     {% if user.is_superuser %}
-    async function sendReload(id) {
+    window.sendReload = async (id) => {
         const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         const test = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
         alert(await test.text());
     }
 
-    function reportIssue(id) {
+    window.reportIssue = (id) => {
         const msg = prompt('Quel est l\'erreur rencontrée ?', 'Test');
         console.log(msg);
     }

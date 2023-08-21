@@ -12,14 +12,22 @@
 
 {% block content %}
 <div class="anime">
-    <h1 class="anime_name">
-        {{ anime.name }}
+    <div class="title">
+        <h1 class="anime_name">
+            {{ anime.name }}
+        </h1>
+        <span class="fav" onclick="favAnime()">
+            {% include "icons/round-star-outline.html" %}
+        </span>
+        <span class="fav hidden" onclick="unfavAnime()">
+            {% include "icons/round-star.html" with fill="#ffdf00" %}
+        </span>
         {% if user.is_superuser %}
-        <a href="{% url 'admin:animes_anime_change' anime.id %}" class="to_admin" title="Ouvrir dans l'admin">
-            @
-        </a>
+        <h1>
+            <a href="{% url 'admin:animes_anime_change' anime.id %}" class="to_admin" title="Ouvrir dans l'admin">@</a>
+        </h1>
         {% endif %}
-    </h1>
+    </div>
     <div class="content">
         <div class="anime_detail">
             <div class="slideshow">
@@ -28,12 +36,12 @@
                 {% endfor %}
                 <a class="previous hidden">
                     <span onclick="slideShow(-1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.71 15.88L10.83 12l3.88-3.88a.996.996 0 1 0-1.41-1.41L8.71 11.3a.996.996 0 0 0 0 1.41l4.59 4.59c.39.39 1.02.39 1.41 0c.38-.39.39-1.03 0-1.42z"/></svg>
+                        {% include "icons/round-keyboard-arrow-left.html" %}
                     </span>
                 </a>
                 <a class="next{% if anime.images.count < 2 %} hidden{% endif %}">
                     <span onclick="slideShow(1)">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
+                        {% include "icons/round-keyboard-arrow-right.html" %}
                     </span>
                 </a>
             </div>
@@ -74,13 +82,13 @@
                     {% for season in seasons_list %}
                         {% if versions|length > 1 or seasons_list|length > 1%}
                         <div id="{{ version }}-{{ forloop.counter0 }}" class="season{% if forloop.parentloop.first and forloop.first %} selected{% endif %}" onclick="displaySeason('{{ version }}-{{ forloop.counter0 }}')">
-                            <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 15.88L13.17 12L9.29 8.12a.996.996 0 1 1 1.41-1.41l4.59 4.59c.39.39.39 1.02 0 1.41L10.7 17.3a.996.996 0 0 1-1.41 0c-.38-.39-.39-1.03 0-1.42z"/></svg>
+                            {% include "icons/round-keyboard-arrow-right.html" with size="24" %}
                             {{ season.name }}
                         </div>
                         {% endif %}
                         <ul class="episodes{% if not forloop.parentloop.first or not forloop.first %} toggled_off{% endif %}">
                         {% for episode in season.values %}
-                            <li class="episode">
+                            <li class="episode" data-episode="{{ episode.slug }}">
                                 <a href="{% url 'animes:episode' anime_slug=anime.slug episode_slug=episode.slug %}">
                                     {{ episode.type|title }}{% if episode.number %} {{ episode.number|numberformat }}{% endif %}
                                 </a>
@@ -98,28 +106,57 @@
 {% endblock %}
 
 {% block footer %}
-<script>
+<script lang="js" type="module">
+    import { isFavAnime, favAnime, unfavAnime, getSeenEpisodes } from '{% static "js/user_data.js" %}';
+
+    const anime = '{{ anime.slug }}';
+    const favs = document.querySelectorAll('.title .fav');
+    if (isFavAnime(anime)) {
+        favs[0].classList.add('hidden');
+        favs[1].classList.remove('hidden');
+    }
+
+    window.favAnime = () => {
+        favs[0].classList.add('hidden');
+        favs[1].classList.remove('hidden');
+        favAnime(anime);
+    };
+
+    window.unfavAnime = () => {
+        favs[0].classList.remove('hidden');
+        favs[1].classList.add('hidden');
+        unfavAnime(anime);
+    };
+
+    const episodes = document.querySelectorAll('.episode');
+    const seenEpisodes = getSeenEpisodes(anime);
+    for (const episode of episodes) {
+        if (seenEpisodes.includes(episode.dataset.episode)) {
+            episode.classList.add('seen');
+        }
+    }
+
     let imageIndex = 0;
     const images = document.querySelectorAll('.slideshow img')
     const previous = document.querySelector('.previous');
     const next = document.querySelector('.next');
 
     const seasons = document.querySelectorAll('.season');
-    const episodes = document.querySelectorAll('.episodes');
+    const episodesList = document.querySelectorAll('.episodes');
 
-    function displaySeason(id) {
+    window.displaySeason = (id) => {
         for (const [i, season] of seasons.entries()) {
             if (season.id === id) {
                 season.classList.toggle('selected');
-                episodes[i].classList.toggle('toggled_off');
+                episodesList[i].classList.toggle('toggled_off');
             } else {
                 season.classList.remove('selected');
-                episodes[i].classList.add('toggled_off');
+                episodesList[i].classList.add('toggled_off');
             }
         }
     }
 
-    function slideShow(n) {
+    window.slideShow = (n) => {
         imageIndex += n;
         for (const [i, image] of images.entries()) {
             if (i === imageIndex) {

@@ -45,17 +45,28 @@
     max-width: 400px;
 }
 
-.episode_snippet .to_admin,
-.anime_snippet .to_admin {
+.episode_snippet .icons,
+.anime_snippet .icons {
     position: absolute;
     z-index: 90;
     top: 0;
     right: 0;
 
-    padding: 0 4px;
     border-radius: var(--universal-border-radius);
+    display: flex;
+    align-items: center;
 
     background-color: #AAAA;
+    font-size: small;
+}
+
+.episode_snippet .icons > *,
+.anime_snippet .icons > * {
+    padding: 0 2px;
+}
+
+.episode_snippet .icons .to_admin,
+.anime_snippet .icons .to_admin {
     font-size: small;
 }
 

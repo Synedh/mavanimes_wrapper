@@ -12,24 +12,24 @@ from .models import Anime, Episode, Tag, VideoURL
 
 def index(request):
     seven_days_ago = timezone.make_aware(datetime.fromordinal(
-        (timezone.now() - timedelta(days=7)).date().toordinal()
+        (timezone.now() - timedelta(days=6)).date().toordinal()
     ))
     episodes = (
         Episode.objects.filter(pub_date__gte=seven_days_ago)
-                       .order_by('pub_date')
+                       .order_by('-pub_date')
     )
 
     episodes_days = []
-    for i in range(7, 0, -1):
+    for i in range(6, -1, -1):
         date = (seven_days_ago + timedelta(days=i)).date()
-        eps = sorted([episode for episode in episodes
+        eps = [
+            episode for episode in episodes
             if episode.pub_date.date() == date
-        ], key=lambda episode: episode.pub_date, reverse=True)
+        ]
         episodes_days.append([date, eps])
 
     context = {
-        'episodes_days': episodes_days,
-        'last_animes': Anime.objects.order_by('-update_date').all()[:10]
+        'episodes_days': episodes_days
     }
     return render(request, 'index.html', context)
 

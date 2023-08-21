@@ -67,11 +67,23 @@
 {% endblock %}
 
 {% block footer %}
-<script>
-const tags = '{{ request.GET.tags }}';
+<script lang="js" type="module">
+    import { getFavAnimes } from '{% static "js/user_data.js" %}';
 
-function send (search) {
-    window.location = `?search=${search}${ tags.length ? `&tags=${tags}` : '' }`;
-}
+    const animes = document.querySelectorAll('.anime_snippet');
+    const favIcons = document.querySelectorAll('.fav_icon');
+    const favAnimes = getFavAnimes();
+    for (const [i, anime] of animes.entries()) {
+        if (favAnimes.includes(anime.dataset.anime)) {
+            favIcons[i].classList.remove('hidden');
+        }
+    }
+
+    const tags = '{{ request.GET.tags }}';
+    window.send = (search) => {
+        window.location = `?search=${search}${ tags.length ? `&tags=${tags}` : '' }`;
+    }
+</script>
+<script>
 </script>
 {% endblock %}

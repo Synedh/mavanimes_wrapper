@@ -1,14 +1,22 @@
 {% load numberformat %}
 
-<div class="episode_snippet">
-    {% if user.is_superuser %}
-    <a href="{% url 'admin:animes_episode_change' episode.id %}" class="to_admin" title="Ouvrir dans l'admin">
-        @
-    </a>
-    {% endif %}
+<div class="episode_snippet" data-anime="{{ episode.anime.slug }}" data-episode="{{ episode.slug }}">
+    <span class="icons">
+        <span class="seen_icon hidden" title="Episode vu">
+            {% include "icons/check.html" with size="18" %}
+        </span>
+        <span class="fav_icon hidden" title="Vous suivez cet anime">
+            {% include "icons/round-star.html" with size="18" %}
+        </span>
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:animes_episode_change' episode.id %}" class="to_admin" title="Ouvrir dans l'admin">
+            {% include "icons/admin-outline.html" with size="18" %}
+        </a>
+        {% endif %}
+    </span>
     <a href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=episode.slug %}">
         <div class="image_container">
-            <svg width="64" height="64" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21q-.825 0-1.413-.587Q3 19.825 3 19V5q0-.825.587-1.413Q4.175 3 5 3h14q.825 0 1.413.587Q21 4.175 21 5v14q0 .825-.587 1.413Q19.825 21 19 21Zm0-2h14V5H5v14Zm1-2h12l-3.75-5l-3 4L9 13Zm-1 2V5v14Z"/></svg>
+            {% include "icons/image-outline.html" with size="64" %}
             {% if episode.image %}
             <img src="https://wsrv.nl/?url={{ episode.image }}" alt="{{ episode.name }}" />
             {% endif %}

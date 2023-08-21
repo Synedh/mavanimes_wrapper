@@ -30,4 +30,20 @@
 
 {% block footer %}
 {% include "footer.html" %}
+<script lang="js" type="module">
+    import { getFavAnimes, isSeenEpisode } from '{% static "js/user_data.js" %}';
+
+    const episodes = document.querySelectorAll('.episode_snippet');
+    const favIcons = document.querySelectorAll('.fav_icon');
+    const seenIcons = document.querySelectorAll('.seen_icon');
+    const favAnimes = getFavAnimes();
+    for (const [i, episode] of episodes.entries()) {
+        if (favAnimes.includes(episode.dataset.anime)) {
+            favIcons[i].classList.remove('hidden');
+        }
+        if (isSeenEpisode(episode.dataset.anime, episode.dataset.episode)) {
+            seenIcons[i].classList.remove('hidden');
+        }
+    }
+</script>
 {% endblock %}

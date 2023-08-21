@@ -6,6 +6,18 @@
     flex-wrap: wrap;
 }
 
+.title, .title .fav {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+.title .fav:hover {
+    cursor: pointer;
+    filter: brightness(150%);
+}
+
+
 li {
     list-style: none;
 }
@@ -110,6 +122,11 @@ li {
 .episode {
     width: 100%;
     padding: 5px 10px;
+}
+
+.episode.seen::marker {
+    content: "✔";
+    color: var(--a-link-color);
 }
 
 .episodes {
