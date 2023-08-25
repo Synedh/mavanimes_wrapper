@@ -44,13 +44,13 @@
                 <div class="dropdown_options">
                     <a href="{% url 'animes:anime_detail' episode.anime.slug %}" title="Aller vers l'anime">Anime</a>
                     <a href="{{ episode.mav_url }}" target="blank" rel="noreferrer noopener" title="Ouvrir dans mavanimes">Mav</a>
-                    {% if user.is_superuser %}
-                    <a href="{% url 'admin:animes_episode_change' episode.id %}" title="Ouvrir dans l'admin">Admin</a>
-                    <span onclick="reportIssue({{ episode.anime.id }})" title="Remonter une erreur">Erreur</span>
                     <span onclick="toggleSeenEpisode()" title="Marquer comme vu">
                         Vu
                         <span class="seen hidden">✔</span>
                     </span>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'admin:animes_episode_change' episode.id %}" title="Ouvrir dans l'admin">Admin</a>
+                    <span onclick="reportIssue({{ episode.anime.id }})" title="Remonter une erreur">Erreur</span>
                     <span title="Recharger l'épisode" onclick="sendReload({{ anime.id }})">
                         {% csrf_token %}
                         Recharger

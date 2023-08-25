@@ -69,7 +69,7 @@ def date_and_videos_of_ep(url: str):
 def parse_ep(url: str) -> EpisodeDTO:
     episode_html = get_page(url)
     schema = json.loads(re.search(
-        r'<script type=\'application\/ld\+json\'.*?>(.*?)</script>',
+        r'<script type=\"application\/ld\+json\".*?>(.*?)</script>',
         episode_html
     ).group(1))
     pub_date = next(iter(re.findall(
