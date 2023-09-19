@@ -1,0 +1,47 @@
+{% extends "overall.html" %}
+{% load static %}
+
+{% block title %}Animes - {{ block.super }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="head_box">
+        <h1>Calendrier des sorties</h1>
+        <p>Le calendrier est généré automatiquement à partir des sorties des deux dernières semaines</p>
+    </div>
+
+    <div class="calendar">
+        {% for weekday, animes in weekdays_animes %}
+        <div class="day">
+            <div class="top_day">
+                <span>{{ weekday }}</span>
+            </div>
+            <div class="day_animes">
+            {% for anime in animes %}
+            {% include "animes/anime_snippet.html" %}
+            {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block footer %}
+<script lang="js" type="module">
+    import { getFavAnimes } from '{% static "js/user_data.js" %}';
+
+    const animes = document.querySelectorAll('.anime_snippet');
+    const favIcons = document.querySelectorAll('.fav_icon');
+    const favAnimes = getFavAnimes();
+    for (const [i, anime] of animes.entries()) {
+        if (favAnimes.includes(anime.dataset.anime)) {
+            favIcons[i].classList.remove('hidden');
+        }
+    }
+</script>
+{% endblock %}

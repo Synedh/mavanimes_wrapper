@@ -13,6 +13,9 @@
             <a class="button-icon" href="{% url 'movie_list' %}">
                 Films
             </a>
+            <a class="button-icon" href="{% url 'animes:calendar' %}">
+                Calendrier sorties
+            </a>
         </div>
     </div>
     {% if request.path != '/animes/' and request.path != '/films/' %}

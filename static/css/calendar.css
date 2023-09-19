@@ -1,0 +1,55 @@
+.calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin: 20px 0;
+    width: 100%;
+}
+
+.calendar .day {
+    display: flex;
+    gap: 10px;
+}
+
+.calendar .day .top_day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 110px;
+    min-width: 110px;
+
+    background: var(--secondary-back-color);
+    color: var(--secondary-fore-color);
+    font-variant: small-caps;
+    font-size: large;
+    font-weight: bold;
+}
+
+.calendar .day .day_animes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.anime_snippet {
+    width: 110px;
+}
+
+.anime_snippet a {
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+}
+
+.anime_snippet .infos .name {
+    height: 64px;
+    width: calc(100% - 20px);
+    font-size: small;
+    -webkit-line-clamp: 3;
+}
+
+.anime_snippet .infos .description {
+    display: none;
+}

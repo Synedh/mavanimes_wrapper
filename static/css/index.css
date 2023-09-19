@@ -118,6 +118,7 @@
 .anime_snippet .infos .name {
     color: var(--secondary-fore-color);
     height: 48px;
+    width: calc(100% - 20px);
 
     display: -webkit-box;
     -webkit-box-orient: vertical;

@@ -137,3 +137,22 @@ def refresh_episode(request, anime_slug, episode_slug):
             return HttpResponseServerError(err)
     else:
         raise Http404('Page not found')
+
+def calendar(request):
+    today = timezone.make_aware(datetime.fromordinal(datetime.now().date().toordinal()))
+    animes_week_1 = set(episode.anime for episode in Episode.objects.filter(pub_date__lt=today, pub_date__gte=today - timedelta(days=8)))
+    animes_week_2 = set(episode.anime for episode in Episode.objects.filter(pub_date__lt=today - timedelta(days=7), pub_date__gte=today - timedelta(days=15)))
+
+    animes = animes_week_1.intersection(animes_week_2)
+    days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+    weekdays_animes = [
+        (
+            days[weekday],
+            [anime for anime in animes if anime.episodes.last().pub_date.weekday() == weekday]
+        ) for weekday in range(7)
+    ]
+
+    context = {
+        'weekdays_animes': weekdays_animes
+    }
+    return render(request, 'animes/calendar.html', context)
