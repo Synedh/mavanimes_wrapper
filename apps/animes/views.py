@@ -133,15 +133,21 @@ def refresh_episode(request, anime_slug, ep_slug):
                 msg = 'Update done, please refresh the page.'
             episode.save()
             return HttpResponse(msg)
-        except Exception as err:
+        except Exception as err: # pylint: disable=broad-exception-caught
             return HttpResponseServerError(err)
     else:
         raise Http404('Page not found')
 
 def calendar(request):
     today = timezone.make_aware(datetime.fromordinal(datetime.now().date().toordinal()))
-    animes_week_1 = set(episode.anime for episode in Episode.objects.filter(pub_date__lt=today, pub_date__gte=today - timedelta(days=8)))
-    animes_week_2 = set(episode.anime for episode in Episode.objects.filter(pub_date__lt=today - timedelta(days=7), pub_date__gte=today - timedelta(days=15)))
+    animes_week_1 = set(episode.anime for episode in Episode.objects.filter(
+        pub_date__lt=today,
+        pub_date__gte=today - timedelta(days=8)
+    ))
+    animes_week_2 = set(episode.anime for episode in Episode.objects.filter(
+        pub_date__lt=today - timedelta(days=7),
+        pub_date__gte=today - timedelta(days=15)
+    ))
 
     animes = animes_week_1.intersection(animes_week_2)
     days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
