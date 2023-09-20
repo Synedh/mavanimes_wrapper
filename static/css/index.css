@@ -69,16 +69,16 @@
     font-size: small;
 }
 
+.episode_snippet:hover,
+.anime_snippet:hover {
+    filter: brightness(140%);
+    transition: var(--universal-transition);
+}
+
 .episode_snippet a,
 .anime_snippet a {
     display: flex;
     color: inherit;
-}
-
-.episode_snippet:hover a,
-.anime_snippet:hover a {
-    filter: brightness(140%);
-    transition: var(--universal-transition);
 }
 
 .episode_snippet .image_container,
