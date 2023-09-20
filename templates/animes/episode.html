@@ -12,12 +12,12 @@
     <div class="video_reader">
         <div class="videos">
         {% if previous %}
-        <a class="command previous" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=previous %}" title="Épisode précédent">
+        <a class="command previous" href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=previous %}" title="Épisode précédent">
             {% include "icons/round-keyboard-arrow-left.html" with size="-1" %}
         </a>
         {% endif %}
         {% if next %}
-        <a class="command next" href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=next %}" title="Épisode suivant">
+        <a class="command next" href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=next %}" title="Épisode suivant">
             {% include "icons/round-keyboard-arrow-right.html" with size="-1" %}
         </a>
         {% endif %}

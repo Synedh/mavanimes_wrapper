@@ -1,16 +1,6 @@
 {% load split %}
 
 <div class="anime_snippet" data-anime="{{ anime.slug }}">
-    <span class="icons">
-        <span class="fav_icon hidden" title="Vous suivez cet anime">
-            {% include "icons/round-star.html" with size="18" %}
-        </span>
-        {% if user.is_superuser %}
-        <a href="{% url 'admin:animes_anime_change' anime.id %}" class="to_admin" title="Ouvrir dans l'admin">
-            {% include "icons/admin-outline.html" with size="18" %}
-        </a>
-        {% endif %}
-    </span>
     <a href="{% url 'animes:anime_detail' anime.slug %}">
         <div class="image_container">
             {% include "icons/image-outline.html" with size="64" %}
@@ -37,4 +27,14 @@
             </div> {% endcomment %}
         </div>
     </a>
+    <span class="icons">
+        <span class="fav_icon hidden" title="Vous suivez cet anime">
+            {% include "icons/round-star.html" with size="18" %}
+        </span>
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:animes_anime_change' anime.id %}" class="to_admin" title="Ouvrir dans l'admin">
+            {% include "icons/admin-outline.html" with size="18" %}
+        </a>
+        {% endif %}
+    </span>
 </div>

@@ -48,7 +48,6 @@
 .episode_snippet .icons,
 .anime_snippet .icons {
     position: absolute;
-    z-index: 90;
     top: 0;
     right: 0;
 
@@ -56,7 +55,7 @@
     display: flex;
     align-items: center;
 
-    background-color: #AAAA;
+    background-color: #AAAC;
     font-size: small;
 }
 
@@ -70,16 +69,16 @@
     font-size: small;
 }
 
-.episode_snippet:hover,
-.anime_snippet:hover {
-    filter: brightness(140%);
-    transition: var(--universal-transition);
-}
-
 .episode_snippet a,
 .anime_snippet a {
     display: flex;
     color: inherit;
+}
+
+.episode_snippet:hover a,
+.anime_snippet:hover a {
+    filter: brightness(140%);
+    transition: var(--universal-transition);
 }
 
 .episode_snippet .image_container,

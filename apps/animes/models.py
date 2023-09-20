@@ -137,7 +137,7 @@ class Episode(models.Model):
             'animes:episode',
             kwargs={
                 'anime_slug': self.anime.slug,
-                'episode_slug': self.slug
+                'ep_slug': self.slug
             }
         )
 

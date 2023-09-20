@@ -14,7 +14,7 @@
         </a>
         {% endif %}
     </span>
-    <a href="{% url 'animes:episode' anime_slug=episode.anime.slug episode_slug=episode.slug %}">
+    <a href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=episode.slug %}">
         <div class="image_container">
             {% include "icons/image-outline.html" with size="64" %}
             {% if episode.image %}

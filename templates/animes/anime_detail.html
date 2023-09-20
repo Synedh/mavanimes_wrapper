@@ -89,7 +89,7 @@
                         <ul class="episodes{% if not forloop.parentloop.first or not forloop.first %} toggled_off{% endif %}">
                         {% for episode in season.values %}
                             <li class="episode" data-episode="{{ episode.slug }}">
-                                <a href="{% url 'animes:episode' anime_slug=anime.slug episode_slug=episode.slug %}">
+                                <a href="{% url 'animes:episode' anime_slug=anime.slug ep_slug=episode.slug %}">
                                     {{ episode.type|title }}{% if episode.number %} {{ episode.number|numberformat }}{% endif %}
                                 </a>
                             </li>
