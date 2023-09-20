@@ -18,7 +18,7 @@
     <div class="calendar">
         {% for weekday, animes in weekdays_animes %}
         <div class="day">
-            <div class="top_day{% if weekday == today %} highlight%{% endif %}">
+            <div class="top_day{% if weekday == today %} highlight{% endif %}">
                 <span>{{ weekday }}</span>
             </div>
             <div class="day_animes">
