@@ -27,6 +27,10 @@
     font-weight: bold;
 }
 
+.calendar .day .top_day.highlight {
+    filter: brightness(140%);
+}
+
 .calendar .day .day_animes {
     display: flex;
     flex-wrap: wrap;

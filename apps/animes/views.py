@@ -153,6 +153,7 @@ def calendar(request):
     ]
 
     context = {
+        'today': days[today.weekday()],
         'weekdays_animes': weekdays_animes
     }
     return render(request, 'animes/calendar.html', context)
