@@ -7,19 +7,19 @@ from apps.animes.models import Anime, Episode, VideoURL
 logger = logging.getLogger(__name__)
 
 class EpisodeDTO(TypedDict):
-        anime: str
-        season: int
-        number: float
-        type: Episode.Type
-        version: str
-        name: str
-        image: Optional[str]
-        small_image: Optional[str]
-        pub_date: datetime
-        video_urls: List[str]
-        mav_url: str
+    anime: str
+    season: int
+    number: float
+    type: Episode.Type
+    version: str
+    name: str
+    image: Optional[str]
+    small_image: Optional[str]
+    pub_date: datetime
+    video_urls: List[str]
+    mav_url: str
 
-## TODO ##
+
 def save_episode(episode_dict: EpisodeDTO) -> Episode:
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
     video_urls = episode_dict['video_urls']

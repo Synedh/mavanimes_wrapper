@@ -12,7 +12,10 @@ logger = logging.getLogger(__name__)
 
 def save_ep(episode_dict: EpisodeDTO) -> Episode:
     anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
-    new_season = episode_dict['season'] not in anime.episodes.values_list('season', flat=True).order_by().distinct()
+    new_season = (
+        episode_dict['season'] not in
+        anime.episodes.values_list('season', flat=True).order_by().distinct()
+    )
     video_urls = episode_dict['video_urls']
     del episode_dict['video_urls']
     if image := episode_dict.get('image'):

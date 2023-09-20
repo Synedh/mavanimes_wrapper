@@ -1,20 +1,23 @@
-from django.utils import timezone
-from django.core.management.base import BaseCommand
-
 import logging
 import re
-import requests
 
-from .parsers import ep_title_parser
+import requests
+from django.core.management.base import BaseCommand
+from django.utils import timezone
+
 from apps.animes.models import Anime, Episode, VideoURL
+from utils.parsers import ep_title_parser
 
 logger = logging.getLogger(__name__)
 
 
 def videos_of_ep(url):
-    response = requests.get(url)
+    response = requests.get(url, timeout=5000)
     if not response.ok:
-        logger.error(f'HTTP Error {response.status_code} while requesting {response.url}: {response.text}')
+        logger.error(
+            'HTTP Error %d while requesting %s: %s',
+            response.status_code, response.url, response.text
+        )
         exit(1)
 
     return re.findall(r'iframe\s+src="(.*?)"', response.text)
@@ -63,15 +66,18 @@ def save_ep(episode_dict):
     ) for url in video_urls]
 
     if new_episode or any(new_url for _, new_url in videos):
-        logger.info(f'{"New" if new_episode else "Updated"} episode {episode.name}')
+        logger.info('%s episode %s', "New" if new_episode else "Updated", episode.name)
         episode.upload_date = timezone.now()
         episode.save()
     return episode
 
 def get_last_eps():
-    response = requests.get('http://www.mavanimes.co/')
+    response = requests.get('http://www.mavanimes.co/', timeout=5000)
     if not response.ok:
-        logger.error(f'HTTP Error {response.status_code} while requesting {response.url}: {response.text}')
+        logger.error(
+            'HTTP Error %d while requesting %s: %s',
+            response.status_code, response.url, response.text
+        )
         exit(1)
 
     eps_html = re.findall(r'<div class="col\-sm\-3 col\-xs\-12">(.+?)<\/div>', response.text.replace('\n', ' '))

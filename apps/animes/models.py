@@ -20,8 +20,7 @@ class Tag(models.Model):
         self.color = f'#{color(0):02x}{color(1):02x}{color(2):02x}'
         return super().save(*args, **kwargs)
 
-
-    def __str__(self) -> str:
+    def __str__(self) -> str: # pylint: disable=invalid-str-returned
         return self.name
 
     @property
@@ -52,7 +51,7 @@ class Anime(models.Model):
     update_date = models.DateTimeField(auto_now_add=True)
     mav_url = models.URLField(blank=True, default='')
 
-    def __str__(self) -> str:
+    def __str__(self) -> str: # pylint: disable=invalid-str-returned
         return self.name
 
     def get_absolute_url(self) -> str:
@@ -108,16 +107,16 @@ class Episode(models.Model):
     def image(self):
         key = f's{self.season}'
         if self.type != self.Type.EPISODE:
-            key = f'{self.type.lower()}{self.number}'
+            key = f'{self.type.lower()}{self.number}' # pylint: disable=no-member
         images = self.anime.get_images(key)
         if not images:
             return None
         return images.small_image if images.small_image else images.image
 
     def save(self, *args, **kwargs):
-        self.slug = f'{self.version.lower()}-{self.type.lower()}-{self.season}-{self.number:g}'
+        self.slug = f'{self.version.lower()}-{self.type.lower()}-{self.season}-{self.number:g}' # pylint: disable=no-member
         super().save(*args, **kwargs)
-        anime_versions = set(self.anime.versions.split(',')) | set([self.version])
+        anime_versions = set(self.anime.versions.split(',')) | set([self.version]) # pylint: disable=no-member
         self.anime.versions = ','.join(sorted(v for v in list(anime_versions) if v))
         self.anime.episodes_count = self.anime.episodes.count()
         self.anime.save()
@@ -142,7 +141,7 @@ class Episode(models.Model):
             }
         )
 
-    def __str__(self) -> str:
+    def __str__(self) -> str: # pylint: disable=invalid-str-returned
         return self.name
 
     class Meta:
@@ -160,7 +159,7 @@ class VideoURL(models.Model):
         return f'{self.source} - {self.url}'
 
     def save(self, *args, **kwargs):
-        self.source = self.url.split('/')[2].split('.')[-2]
+        self.source = self.url.split('/')[2].split('.')[-2] # pylint: disable=no-member
         return super().save(*args, **kwargs)
 
     class Meta:

@@ -1,7 +1,7 @@
-from django.core.management.base import BaseCommand
-
-import re
 import logging
+import re
+
+from django.core.management.base import BaseCommand
 
 from mavanimes_wrapper.management.commands.get_anime import get_anime
 from utils.parsers import get_page
@@ -19,9 +19,9 @@ def get_animes(url, start=0):
     for i, anime_url in enumerate(anime_url_list[start:], start=start + 1):
         anime = get_anime(anime_url)
         if not anime:
-            logger.info(f'[{i}/{total}] Skipped {anime_url}')
+            logger.info('[%d/%d] Skipped %s', i, total, anime_url)
             continue
-        logger.info(f'[{i}/{total}] {anime.name} - {anime.episodes.count()} episode(s)')
+        logger.info('[%d/%d] %s - %s episode(s)', i, total, anime.name, anime.episodes.count())
 
 
 class Command(BaseCommand):

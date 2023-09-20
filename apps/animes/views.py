@@ -97,8 +97,8 @@ def anime_detail(request, slug):
     }
     return render(request, 'animes/anime_detail.html', context)
 
-def episode_detail(request, anime_slug, episode_slug):
-    episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
+def episode_detail(request, anime_slug, ep_slug):
+    episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=ep_slug)
     episode_index = list(episode.anime.episodes.all()).index(episode)
 
     previous_ep, next_ep = None, None
@@ -114,9 +114,9 @@ def episode_detail(request, anime_slug, episode_slug):
     }
     return render(request, 'animes/episode.html', context)
 
-def refresh_episode(request, anime_slug, episode_slug):
+def refresh_episode(request, anime_slug, ep_slug):
     if request.method == 'PATCH':
-        episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=episode_slug)
+        episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=ep_slug)
         try:
             pub_date, video_urls = date_and_videos_of_ep(episode.mav_url)
             episode.pub_date = pub_date

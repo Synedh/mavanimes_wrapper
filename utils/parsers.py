@@ -39,7 +39,10 @@ def ep_title_parser(ep_name):
         episode_type = Episode.Type.OAV
 
     anime = re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', parsed_name).group(1)
-    if not season_list and (groups := re.search(r'\s+(\d+)$', anime)) and (season := int(groups.group())) < 21:
+    if (not season_list
+        and (groups := re.search(r'\s+(\d+)$', anime))
+        and (season := int(groups.group())) < 21
+    ):
         anime = re.sub(r'\s+\d+$', '', anime)
     else:
         season = int(next(iter(season_list), 1))

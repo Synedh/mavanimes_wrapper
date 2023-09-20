@@ -30,16 +30,20 @@ class HTMLCleaner(HTMLParser):
 HTML_CLEANER = HTMLCleaner()
 
 def html_to_episodes(anime_html: str, anime_name: str) -> List[EpisodeDTO]:
-    episodes_html = re.findall(r'<h2 class="raees "><a href="(.*?)">:• &nbsp;&nbsp;(.*?)</a></h2>', anime_html)
+    episodes_html = re.findall(
+        r'<h2 class="raees "><a href="(.*?)">:• &nbsp;&nbsp;(.*?)</a></h2>', anime_html
+    )
     if not episodes_html:
-        episodes_html = re.findall(r'<div>(?:<strong>)?<a title=".*?" href="(.*?)">(?:<strong>)?• (.*?)(?:</strong>)?</a>(?:</strong>)?</div>', anime_html)
+        episodes_html = re.findall(
+            r'<div>(?:<strong>)?<a title=".*?" href="(.*?)">(?:<strong>)?• (.*?)(?:</strong>)?</a>(?:</strong>)?</div>', anime_html # pylint: disable=line-too-long
+        )
     if not episodes_html:
         episodes_html = re.findall(r'<a (?:title=".*?" )?href="(.*?)">• (.*?)<', anime_html)
 
     total = len(episodes_html)
     episodes: List[EpisodeDTO] = []
     for i, (mav_url, name) in enumerate(episodes_html, start=1):
-        logger.info(f'[{i}/{total}] {name}')
+        logger.info('[%d/%d] %s', i, total, name)
         episode = {
             **parse_ep(mav_url),
             'anime': anime_name,
@@ -59,13 +63,16 @@ def html_to_episodes(anime_html: str, anime_name: str) -> List[EpisodeDTO]:
         max(ep['season'] for ep in ep_eps) == 1 and
         max(ep['number'] for ep in ep_eps) != len(ep_eps)
     ):
-        input(f'\aInvalid number of eps. Max num: {max(ep["number"] for ep in ep_eps)}, nb eps: {len(ep_eps)}')
+        input(f'\aInvalid number of eps. Max num: {max(ep["number"] for ep in ep_eps)},'
+              f' nb eps: {len(ep_eps)}')
     return episodes
 
 def html_to_anime(anime_html: str) -> dict:
     anime_name = unescape(re.search(r'<h1 class="entry-title">(.*)</h1>', anime_html).group(1))
-    logger.info(f'Anime: {anime_name}')
-    anime_name = ' '.join(re.sub(r'(?:V[A-Z]+)|(?:\(?S(?:aison\s)?\d+\s*\)?)', '', anime_name).replace(' :', ':').split())
+    logger.info('Anime: %s', anime_name)
+    anime_name = ' '.join(re.sub(
+        r'(?:V[A-Z]+)|(?:\(?S(?:aison\s)?\d+\s*\)?)', '', anime_name
+    ).replace(' :', ':').split())
     anime_name = re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', anime_name).group(1)
 
     image_html = re.search(r'<img .*?\/>', anime_html)
@@ -74,23 +81,29 @@ def html_to_anime(anime_html: str) -> dict:
         images = re.findall(r'(https?://.*?)["\s]', image_html.group())
 
     try:
-        description_html = re.search(r'<img .*?\/><br \/>(.*?)<(?:(?:h2)|(?:div))', anime_html, re.DOTALL + re.IGNORECASE).group(1)
+        description_html = re.search
+        (r'<img .*?\/><br \/>(.*?)<(?:(?:h2)|(?:div))', anime_html, re.DOTALL + re.IGNORECASE
+    ).group(1)
     except AttributeError:
         try:
-            description_html = re.search(r'INFORMATIONS D.*?</div>(.*?)<(?:(?:h2)|(?:div))', anime_html, re.DOTALL).group(1)
-        except AttributeError as e:
-            logger.error(e)
+            description_html = re.search(
+                r'INFORMATIONS D.*?</div>(.*?)<(?:(?:h2)|(?:div))', anime_html, re.DOTALL
+            ).group(1)
+        except AttributeError as err:
+            logger.error(err)
             input('\a')
             return None, []
     HTML_CLEANER.feed(description_html)
     description = HTML_CLEANER.close().strip()
 
-    tags_line = re.search(r'genre\(?s?\)?\s?:(.*)', description, re.IGNORECASE).group(1) if 'genre' in description.lower() else ''
+    tags_line = re.search(
+        r'genre\(?s?\)?\s?:(.*)', description, re.IGNORECASE
+    ).group(1) if 'genre' in description.lower() else ''
     tags = [tag.strip() for tag in re.findall(r'[\w \'’\-]+', tags_line.lower())]
 
     return {
         'name': anime_name,
-        'image': images[-1] if len(images) else None,
+        'image': images[-1] if images else None,
         'small_image': images[1] if len(images) > 1 else None,
         'tags': tags,
         'description': description
