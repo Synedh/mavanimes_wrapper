@@ -18,9 +18,8 @@ def ep_title_parser(ep_name):
     if season_list:
         parsed_name = re.sub(r'(\(\s*)?saison?\s*\d+(\s*\))?', '', parsed_name, flags=re.IGNORECASE)
 
-    version = next(iter(re.findall(r'\W((?:VF)|(?:VOSTFR))', parsed_name, re.IGNORECASE)), None)
-    if version:
-        parsed_name = re.sub(version, '', parsed_name)
+    version = next(iter(re.findall(r'\W((?:VF)|(?:VOSTFR))', parsed_name, re.IGNORECASE)), 'VOSTFR')
+    parsed_name = re.sub(version, '', parsed_name)
 
     try:
         number = float(re.search(r'^.*?((?:\d*\.)?\d+)\D*$', parsed_name).group(1))

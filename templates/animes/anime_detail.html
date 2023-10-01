@@ -32,7 +32,7 @@
         <div class="anime_detail">
             <div class="slideshow">
                 {% for images in anime.images.all %}
-                <img {% if not forloop.first %}class="hidden" {% endif %}src="https://wsrv.nl/?url={{ images.image }}" />
+                <img {% if not forloop.first %}class="hidden" {% endif %}src="//wsrv.nl/?url={{ images.image }}" />
                 {% endfor %}
                 <a class="previous hidden">
                     <span onclick="slideShow(-1)">
