@@ -34,7 +34,8 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     '127.0.0.1',
     'localhost',
-    'mavanimes.synedh.fr'
+    'mavanimes.synedh.fr',
+    'www.mavanimes.synedh.fr'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
