@@ -5,9 +5,9 @@
         <div class="image_container">
             {% include "icons/image-outline.html" with size="64" %}
             {% if anime.get_images.small_image %}
-            <img src="https://wsrv.nl/?url={{ anime.get_images.small_image }}" onerror="this.style.display='none'" />
+            <img src="https://wsrv.nl/?url={{ anime.get_images.small_image }}&h=82&dpr=3" onerror="this.style.display='none'" />
             {% elif anime.get_images.image %}
-            <img src="https://wsrv.nl/?url={{ anime.get_images.image }}" onerror="this.style.display='none'" />
+            <img src="https://wsrv.nl/?url={{ anime.get_images.image }}&h=82&dpr=3" onerror="this.style.display='none'" />
             {% endif %}
         </div>
         <div class="infos">
