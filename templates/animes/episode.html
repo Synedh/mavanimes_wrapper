@@ -116,17 +116,6 @@
             }
         }
     }
-    {% if user.is_superuser %}
-    window.sendReload = async (id) => {
-        const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        const reponse = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
-        alert(await reponse.text());
-    }
-
-    window.reportIssue = (id) => {
-        const msg = prompt('Quel est l\'erreur rencontrée ?', 'Test');
-        console.log(msg);
-    }
 
     async function getRawVideo () {
         const video = Array.from(videos).find(video => video.dataset.source === 'streamtape');
@@ -145,6 +134,18 @@
     }
 
     getRawVideo();
+
+    {% if user.is_superuser %}
+    window.sendReload = async (id) => {
+        const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        const reponse = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
+        alert(await reponse.text());
+    }
+
+    window.reportIssue = (id) => {
+        const msg = prompt('Quel est l\'erreur rencontrée ?', 'Test');
+        console.log(msg);
+    }
     {% endif %}
 </script>
 {% endblock %}
