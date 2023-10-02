@@ -36,8 +36,8 @@
 .video_reader .videos {
     position: relative;
     aspect-ratio: 16 / 9;
-    height: min(calc(100vh - 140px), calc(80vw / (16 / 9)));
-    min-height: 180px;
+    width: var(--videos-width);
+    min-width: var(--videos-min-width);
 }
 
 .video_reader .videos div,
@@ -54,6 +54,11 @@
 
 .video_reader .infos {
     display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+
+    width: var(--videos-width);
+    min-width: var(--videos-min-width);
     padding-top: 10px;
     gap: 10px;
 }
@@ -63,6 +68,12 @@
     font-weight: bold;
     color: var(--secondary-fore-color);
     flex: 1 0 auto;
+}
+
+.video_reader .infos .options {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
 }
 
 .video_reader .infos .tabs {

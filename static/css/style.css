@@ -49,6 +49,9 @@ body {
     --modal-close-button-hover-color: var(--secondary-fore-color);
 
     --universal-transition: all 0.2s;
+
+    --videos-width: min(calc((100vh - 140px) * (16 / 9)), 80vw);
+    --videos-min-width: 320px;
 }
 
 [type="checkbox"].modal + div .card .modal-close:hover::before,
