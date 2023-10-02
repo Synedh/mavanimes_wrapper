@@ -12,20 +12,23 @@
     <div class="video_reader">
         <div class="videos">
         {% if previous %}
-        <a class="command previous" href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=previous %}" title="Épisode précédent">
-            {% include "icons/round-keyboard-arrow-left.html" with size="-1" %}
-        </a>
+            <a class="command previous" href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=previous %}" title="Épisode précédent">
+                {% include "icons/round-keyboard-arrow-left.html" with size="-1" %}
+            </a>
         {% endif %}
         {% if next %}
-        <a class="command next" href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=next %}" title="Épisode suivant">
-            {% include "icons/round-keyboard-arrow-right.html" with size="-1" %}
-        </a>
+            <a class="command next" href="{% url 'animes:episode' anime_slug=episode.anime.slug ep_slug=next %}" title="Épisode suivant">
+                {% include "icons/round-keyboard-arrow-right.html" with size="-1" %}
+            </a>
         {% endif %}
         {% for video_url in episode.video_urls.all %}
             <div id="video_{{ video_url.source }}" class="video {% if not forloop.first %}hidden{% endif %}" data-source="{{ video_url.source }}" data-url="{{ video_url.url }}">
                 <iframe src="{{ video_url.url }}" frameborder="0" allowfullscreen></iframe>
             </div>
         {% endfor %}
+            <div id="video_raw" class="video hidden" data-source="raw" data-url="">
+                <video controls>
+            </div>
         </div>
         <div class="infos">
             <div class="title">
@@ -37,6 +40,9 @@
                     {{ video_url.source|upper }}
                 </div>
             {% endfor %}
+                <div class="tab_button hidden" onclick="selectVideo({{ episode.video_urls.count }})">
+                    RAW
+                </div>
             </div>
 
             <div class="dropdown" onclick="() => {}">
@@ -113,8 +119,8 @@
     {% if user.is_superuser %}
     window.sendReload = async (id) => {
         const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        const test = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
-        alert(await test.text());
+        const reponse = await fetch('refresh/', { method: 'PATCH', headers: { "X-CSRFToken": csrf_token } });
+        alert(await reponse.text());
     }
 
     window.reportIssue = (id) => {
@@ -122,17 +128,23 @@
         console.log(msg);
     }
 
-    {% comment %} async function setVideos() {
-        for (const video of videos) {
-            const response = await fetch(`/sources/${video.dataset.source}?url=${video.dataset.url}`);
-            if (response.ok) {
-                const src = await response.text();
-                console.log(src);
-            }
+    async function getRawVideo () {
+        const video = Array.from(videos).find(video => video.dataset.source === 'streamtape');
+        if (!video) {
+            console.warn('No streamtape source, raw video could not be generated.')
+            return;
         }
+        const response = await fetch(`/sources/${video.dataset.source}/?url=${video.dataset.url}`);
+        if (!response.ok) {
+            console.error(response);
+            return;
+        }
+        const src = await response.text();
+        document.querySelector('#video_raw').children[0].src = src;
+        tabs[tabs.length -1].classList.remove('hidden');
     }
 
-    setVideos(); {% endcomment %}
+    getRawVideo();
     {% endif %}
 </script>
 {% endblock %}

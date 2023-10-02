@@ -122,17 +122,16 @@ def refresh_episode(request, anime_slug, ep_slug):
             episode.pub_date = pub_date
 
             previous_video_urls = [video_url.url for video_url in episode.video_urls.all()]
-            msg = 'No update required'
-            if video_urls != previous_video_urls:
-                episode.video_urls.all().delete()
-                _ = [VideoURL.objects.get_or_create(
-                    url=url,
-                    source=url.split('.')[0].split('/')[-1],
-                    episode=episode
-                ) for url in video_urls]
-                msg = 'Update done, please refresh the page.'
+            if video_urls == previous_video_urls:
+                return HttpResponse('No update required')
+            episode.video_urls.all().delete()
+            _ = [VideoURL.objects.get_or_create(
+                url=url,
+                source=url.split('.')[0].split('/')[-1],
+                episode=episode
+            ) for url in video_urls]
             episode.save()
-            return HttpResponse(msg)
+            return HttpResponse('Update done, please refresh the page.')
         except Exception as err: # pylint: disable=broad-exception-caught
             return HttpResponseServerError(err)
     else:
