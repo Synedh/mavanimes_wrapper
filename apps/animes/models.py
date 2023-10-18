@@ -25,12 +25,13 @@ class Tag(models.Model):
 
     @property
     @admin.display(description='Quantity of animes')
-    def qty_animes(self):
+    def qty_animes(self) -> int:
         return Anime.objects.filter(tags__id=self.id).count()
 
     @property
     @admin.display(description='Animes')
-    def list_animes(self):
+    def list_animes(self) -> str:
+        """ Used by admin to display tags usage """
         return '\n'.join(anime.name for anime in Anime.objects.filter(tags__id=self.id))
 
     class Meta:
@@ -57,13 +58,13 @@ class Anime(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('animes:anime_detail', kwargs={'slug': self.slug})
 
-    def get_images(self, key=None):
+    def get_images(self, key: str | None=None) -> "AnimeImage":
         try:
             return self.images.get(key=key)
         except ObjectDoesNotExist:
             return self.images.first() # pylint: disable=no-member
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
@@ -104,7 +105,7 @@ class Episode(models.Model):
         default=datetime(1970, 1, 1, tzinfo=timezone.get_current_timezone()))
     mav_url = models.URLField()
 
-    def image(self):
+    def image(self) -> str | None:
         key = f's{self.season}'
         if self.type != self.Type.EPISODE:
             key = f'{self.type.lower()}{self.number}' # pylint: disable=no-member
@@ -113,7 +114,7 @@ class Episode(models.Model):
             return None
         return images.small_image if images.small_image else images.image
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         self.slug = f'{self.version.lower()}-{self.type.lower()}-{self.season}-{self.number:g}' # pylint: disable=no-member
         super().save(*args, **kwargs)
         anime_versions = set(self.anime.versions.split(',')) | set([self.version]) # pylint: disable=no-member
@@ -121,7 +122,7 @@ class Episode(models.Model):
         self.anime.episodes_count = self.anime.episodes.count()
         self.anime.save()
 
-    def delete(self, *args, **kwargs):
+    def delete(self, *args, **kwargs) -> None:
         super().delete(*args, **kwargs)
         self.anime.versions = ','.join(
             self.anime.episodes
@@ -158,7 +159,7 @@ class VideoURL(models.Model):
     def __str__(self) -> str:
         return f'{self.source} - {self.url}'
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         self.source = self.url.split('/')[2].split('.')[-2] # pylint: disable=no-member
         return super().save(*args, **kwargs)
 

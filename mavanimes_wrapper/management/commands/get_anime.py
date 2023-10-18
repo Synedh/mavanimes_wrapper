@@ -1,13 +1,12 @@
 import logging
 import re
-from typing import List
 from html import unescape
 from html.parser import HTMLParser
 
-from django.db import IntegrityError
 from django.core.management.base import BaseCommand
+from django.db import IntegrityError
 
-from apps.animes.models import Anime, Episode, AnimeImage, Tag
+from apps.animes.models import Anime, AnimeImage, Episode, Tag
 from mavanimes_wrapper.management.commands.get_episode import save_ep
 from utils.parsers import get_page, parse_ep
 from utils.utils import EpisodeDTO
@@ -29,7 +28,7 @@ class HTMLCleaner(HTMLParser):
 
 HTML_CLEANER = HTMLCleaner()
 
-def html_to_episodes(anime_html: str, anime_name: str) -> List[EpisodeDTO]:
+def html_to_episodes(anime_html: str, anime_name: str) -> list[EpisodeDTO]:
     episodes_html = re.findall(
         r'<h2 class="raees "><a href="(.*?)">:• &nbsp;&nbsp;(.*?)</a></h2>', anime_html
     )
@@ -41,7 +40,7 @@ def html_to_episodes(anime_html: str, anime_name: str) -> List[EpisodeDTO]:
         episodes_html = re.findall(r'<a (?:title=".*?" )?href="(.*?)">• (.*?)<', anime_html)
 
     total = len(episodes_html)
-    episodes: List[EpisodeDTO] = []
+    episodes: list[EpisodeDTO] = []
     for i, (mav_url, name) in enumerate(episodes_html, start=1):
         logger.info('[%d/%d] %s', i, total, name)
         episode = {

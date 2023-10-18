@@ -51,7 +51,7 @@ def save_episode(episode_dict: EpisodeDTO) -> Episode:
     return episode
 
 
-def move_anime(old_id, new_id, season=1, delete=False):
+def move_anime(old_id: int, new_id: int, season: int | None=1, delete: bool | None=False) -> None:
     old_anime = Anime.objects.get(id=old_id)
     new_anime = Anime.objects.get(id=new_id)
     old_images = old_anime.get_images()

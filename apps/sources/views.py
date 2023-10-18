@@ -1,14 +1,13 @@
 import re
 
 import requests
-
-from django.http import (HttpResponse, HttpResponseBadRequest,
+from django.http import (HttpRequest, HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotAllowed)
 from django.views.decorators.cache import cache_page
 
 
 @cache_page(60)
-def streamtape(request):
+def streamtape(request: HttpRequest) -> HttpResponse:
     url = request.GET.get('url')
     if not url:
         return HttpResponseBadRequest('Bad Request')
