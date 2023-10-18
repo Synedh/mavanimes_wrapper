@@ -1,6 +1,8 @@
 import logging
-from typing import TypedDict, List, Optional
 from datetime import datetime
+from typing import Optional, TypedDict
+
+from django.template.defaultfilters import slugify
 
 from apps.animes.models import Anime, Episode, VideoURL
 
@@ -16,12 +18,15 @@ class EpisodeDTO(TypedDict):
     image: Optional[str]
     small_image: Optional[str]
     pub_date: datetime
-    video_urls: List[str]
+    video_urls: list[str]
     mav_url: str
 
 
 def save_episode(episode_dict: EpisodeDTO) -> Episode:
-    anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
+    anime, new_anime = Anime.objects.get_or_create(slug=slugify(episode_dict['anime']))
+    if new_anime:
+        anime.name = episode_dict['anime']
+
     video_urls = episode_dict['video_urls']
     del episode_dict['video_urls']
     episode_dict['anime'] = anime

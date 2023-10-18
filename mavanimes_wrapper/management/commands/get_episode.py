@@ -3,6 +3,7 @@ import re
 from typing import List
 
 from django.core.management.base import BaseCommand
+from django.template.defaultfilters import slugify
 
 from apps.animes.models import Anime, AnimeImage, Episode, VideoURL
 from utils.parsers import get_page, parse_ep
@@ -11,7 +12,10 @@ from utils.utils import EpisodeDTO
 logger = logging.getLogger(__name__)
 
 def save_ep(episode_dict: EpisodeDTO) -> Episode:
-    anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
+    anime, new_anime = Anime.objects.get_or_create(slug=slugify(episode_dict['anime']))
+    if new_anime:
+        anime.name = episode_dict['anime']
+
     new_season = (
         episode_dict['season'] not in
         anime.episodes.values_list('season', flat=True).order_by().distinct()
