@@ -38,6 +38,9 @@ def parse_ep(ep_xml: xml.etree.ElementTree.Element) -> EpisodeDTO:
 
 def save_ep(episode_dict: EpisodeDTO, homepage: str) -> Episode:
     anime, new_anime = Anime.objects.get_or_create(slug=slugify(episode_dict['anime']))
+    if new_anime:
+        anime.name = episode_dict['anime']
+
     new_season = (
         episode_dict['season'] not in
         anime.episodes.values_list('season', flat=True).order_by().distinct()
