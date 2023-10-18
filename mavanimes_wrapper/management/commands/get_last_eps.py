@@ -1,12 +1,13 @@
 import logging
 import re
-from typing import List, Tuple
 import xml.etree.ElementTree
+from typing import List, Tuple
 
 import dateutil.parser
 from django.core.management.base import BaseCommand
+from django.template.defaultfilters import slugify
 
-from apps.animes.models import Anime, Episode, VideoURL, AnimeImage
+from apps.animes.models import Anime, AnimeImage, Episode, VideoURL
 from utils.parsers import ep_title_parser, get_page
 from utils.utils import EpisodeDTO
 
@@ -36,7 +37,7 @@ def parse_ep(ep_xml: xml.etree.ElementTree.Element) -> EpisodeDTO:
     }
 
 def save_ep(episode_dict: EpisodeDTO, homepage: str) -> Episode:
-    anime, new_anime = Anime.objects.get_or_create(name=episode_dict['anime'])
+    anime, new_anime = Anime.objects.get_or_create(slug=slugify(episode_dict['anime']))
     new_season = (
         episode_dict['season'] not in
         anime.episodes.values_list('season', flat=True).order_by().distinct()
