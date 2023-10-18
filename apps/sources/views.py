@@ -7,7 +7,7 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(60 * 60 * 24)
+@cache_page(60)
 def streamtape(request):
     url = request.GET.get('url')
     if not url:
@@ -15,7 +15,7 @@ def streamtape(request):
     page = requests.get(url, timeout=5000).text
     line = re.search(r'robotlink\'\).innerHTML.*', page).group()
     extract = re.sub(r".*?(//.*?)\W{3,}\w{3}(.*?)\W{3}.*", r"\1\2", line)
-    if 'foo' in extract:
+    if 'id=WP9OOGyY8Xtb3Am&' in extract:
         return HttpResponseNotAllowed('Streamtape blocked the request')
 
     return HttpResponse(f'https:{extract}&stream=1')
