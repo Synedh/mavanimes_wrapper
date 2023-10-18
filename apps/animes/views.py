@@ -2,15 +2,16 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 from django.utils import timezone
+from django.utils.safestring import SafeText
 from django.core.paginator import Paginator
-from django.http import HttpResponse, Http404, HttpResponseServerError
+from django.http import HttpRequest, HttpResponse, Http404, HttpResponseServerError
 from django.shortcuts import render, get_object_or_404
 
 from utils.parsers import date_and_videos_of_ep
 from .models import Anime, Episode, Tag, VideoURL
 
 
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     seven_days_ago = timezone.make_aware(datetime.fromordinal(
         (timezone.now() - timedelta(days=6)).date().toordinal()
     ))
@@ -33,11 +34,11 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-def anime_list(request):
-    limit = request.GET.get('limit', 100)
+def anime_list(request: HttpRequest) -> HttpResponse:
+    limit = request.GET.get('limit', '100')
     page = request.GET.get('page')
     search = request.GET.get('search', '')
-    tag_names = request.GET.get('tags', '').split(',')
+    tag_names = request.GET.getlist('tags', '')
 
     tags = Tag.objects.filter(name__in=tag_names)
     animes = Anime.objects.filter(name__icontains=search)
@@ -56,8 +57,8 @@ def anime_list(request):
     }
     return render(request, 'animes/anime_list.html', context)
 
-def movie_list(request):
-    limit = request.GET.get('limit', 100)
+def movie_list(request: HttpRequest) -> HttpResponse:
+    limit = request.GET.get('limit', '100')
     page = request.GET.get('page')
     search = request.GET.get('search', '')
     movies = Episode.objects.filter(name__icontains=search, type=Episode.Type.FILM).order_by('name')
@@ -67,7 +68,7 @@ def movie_list(request):
     }
     return render(request, 'animes/movie_list.html', context)
 
-def anime_detail(request, slug):
+def anime_detail(request: HttpRequest, slug: SafeText) -> HttpResponse:
     anime = get_object_or_404(Anime, slug=slug)
     versions = {version: defaultdict(list) for version in anime.versions.split(',')}
 
@@ -97,7 +98,7 @@ def anime_detail(request, slug):
     }
     return render(request, 'animes/anime_detail.html', context)
 
-def episode_detail(request, anime_slug, ep_slug):
+def episode_detail(request: HttpRequest, anime_slug: SafeText, ep_slug: SafeText) -> HttpResponse:
     episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=ep_slug)
     episode_index = list(episode.anime.episodes.all()).index(episode)
 
@@ -114,7 +115,7 @@ def episode_detail(request, anime_slug, ep_slug):
     }
     return render(request, 'animes/episode.html', context)
 
-def refresh_episode(request, anime_slug, ep_slug):
+def refresh_episode(request: HttpRequest, anime_slug: SafeText, ep_slug: SafeText) -> HttpResponse:
     if request.method == 'PATCH':
         episode = get_object_or_404(Episode, anime__slug=anime_slug, slug=ep_slug)
         try:
@@ -137,7 +138,7 @@ def refresh_episode(request, anime_slug, ep_slug):
     else:
         raise Http404('Page not found')
 
-def calendar(request):
+def calendar(request: HttpRequest) -> HttpResponse:
     today = timezone.make_aware(datetime.fromordinal(datetime.now().date().toordinal()))
     animes_week_1 = set(episode.anime for episode in Episode.objects.filter(
         pub_date__lt=today,

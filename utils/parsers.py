@@ -1,7 +1,9 @@
+import json
 import logging
 import re
-import json
+from datetime import datetime
 from html import unescape
+from typing import TypedDict
 
 import dateutil.parser
 
@@ -11,7 +13,16 @@ from utils.utils import EpisodeDTO
 
 logger = logging.getLogger(__name__)
 
-def ep_title_parser(ep_name):
+class ParsedTitle(TypedDict):
+    anime: str
+    season: int
+    number: float
+    type: Episode.Type
+    version: str
+    name: str
+
+
+def ep_title_parser(ep_name: str) -> ParsedTitle:
     name = unescape(ep_name)
     parsed_name = unescape(ep_name)
     season_list = re.findall(r'saison?\s?(\d+)', parsed_name, flags=re.IGNORECASE)
@@ -37,7 +48,7 @@ def ep_title_parser(ep_name):
     elif 'oav' in splitted_name or 'ova' in splitted_name or 'OAV-' in parsed_name:
         episode_type = Episode.Type.OAV
 
-    anime = re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', parsed_name).group(1)
+    anime: str = re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', parsed_name).group(1)
     if (not season_list
         and (groups := re.search(r'\s+(\d+)$', anime))
         and (season := int(groups.group())) < 21
@@ -55,7 +66,7 @@ def ep_title_parser(ep_name):
         'version': version.upper()
     }
 
-def date_and_videos_of_ep(url: str):
+def date_and_videos_of_ep(url: str) -> tuple[datetime | None, list[str]]:
     episode_html = get_page(url, allow_to_fail=True)
     if not episode_html:
         return None, []

@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import Any
 
 import requests
 from django.core.management.base import BaseCommand
@@ -11,7 +12,7 @@ from utils.parsers import ep_title_parser
 logger = logging.getLogger(__name__)
 
 
-def videos_of_ep(url):
+def videos_of_ep(url: str) -> list[str]:
     response = requests.get(url, timeout=5000)
     if not response.ok:
         logger.error(
@@ -22,7 +23,7 @@ def videos_of_ep(url):
 
     return re.findall(r'iframe\s+src="(.*?)"', response.text)
 
-def html_to_ep(ep_html):
+def html_to_ep(ep_html: str) -> dict[str, Any]:
     ep_name = re.search(r'<p>(.*?)<\/p>', ep_html).group(1)
     url = re.search(r'<a href="(.*?)">', ep_html).group(1)
 
@@ -41,7 +42,7 @@ def html_to_ep(ep_html):
         'small_image': re.search(r'srcset=".*?(?:(http://.*?)\s.*?)+"', ep_html).group(1)
     }
 
-def save_ep(episode_dict):
+def save_ep(episode_dict: dict[str, Any]) -> Episode:
     anime, _ = Anime.objects.update_or_create(
         name=episode_dict['anime'],
         defaults={
@@ -71,7 +72,7 @@ def save_ep(episode_dict):
         episode.save()
     return episode
 
-def get_last_eps():
+def get_last_eps() -> list[Episode]:
     response = requests.get('http://www.mavanimes.co/', timeout=5000)
     if not response.ok:
         logger.error(

@@ -9,11 +9,11 @@ from utils.parsers import get_page
 logger = logging.getLogger(__name__)
 
 
-def get_anime_url_list(url):
+def get_anime_url_list(url: str) -> list[str]:
     anime_urls_html = get_page(url)
     return re.findall(r'<li>\s*<a href=\"(.*?)\">', anime_urls_html, re.MULTILINE)
 
-def get_animes(url, start=0):
+def get_animes(url: str, start: int=0):
     anime_url_list = get_anime_url_list(url)
     total = len(anime_url_list)
     for i, anime_url in enumerate(anime_url_list[start:], start=start + 1):
