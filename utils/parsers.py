@@ -42,11 +42,13 @@ def ep_title_parser(ep_name: str) -> ParsedTitle:
     splitted_name = parsed_name.lower().split()
     if re.search(r'\bsp.ciale?s?\b', parsed_name, re.IGNORECASE) or 'sp' in splitted_name:
         episode_type = Episode.Type.SPECIAL
+        parsed_name = re.sub(r'\bsp.ciale?s?\b', '', parsed_name, flags=re.IGNORECASE)
     elif 'film' in splitted_name or 'movie' in splitted_name:
         episode_type = Episode.Type.FILM
-        parsed_name = re.sub('film|movie', '', parsed_name, re.IGNORECASE)
+        parsed_name = re.sub(r'film|movie', '', parsed_name, flags=re.IGNORECASE)
     elif 'oav' in splitted_name or 'ova' in splitted_name or 'OAV-' in parsed_name:
         episode_type = Episode.Type.OAV
+        parsed_name = re.sub(r'oav|ova|oav\-', '', parsed_name, flags=re.IGNORECASE)
 
     anime: str = re.search(r'^\W*(.*?)[^a-zA-Z0-9)]*$', parsed_name).group(1)
     if (not season_list

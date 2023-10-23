@@ -1,7 +1,6 @@
 import logging
 import re
 import xml.etree.ElementTree
-from typing import List, Tuple
 
 import dateutil.parser
 from django.core.management.base import BaseCommand
@@ -15,7 +14,7 @@ logger = logging.getLogger(__name__)
 URL = 'http://www.mavanimes.co/'
 
 
-def get_anime_images(anime: Anime, homepage: str) -> Tuple[str]:
+def get_anime_images(anime: Anime, homepage: str) -> tuple[str]:
     res = re.search(rf'<a href="{anime.episodes.last().mav_url}">.*?src="(.*?)".*?srcset=".*?(?:(https?://.*?)\s.*?)+"', homepage, re.DOTALL)
     if res:
         return res.group(1), res.group(2)
@@ -74,7 +73,7 @@ def save_ep(episode_dict: EpisodeDTO, homepage: str) -> Episode:
         logger.info('%s episode %s', "New" if new_episode else "Updated", episode.name)
     return episode
 
-def get_last_eps() -> List[Episode]:
+def get_last_eps() -> list[Episode]:
     feed = xml.etree.ElementTree.fromstring(get_page(f'{URL}feed/'))
     homepage = get_page(URL)
     episodes = [parse_ep(xml_ep) for xml_ep in feed[0].findall('item')]
