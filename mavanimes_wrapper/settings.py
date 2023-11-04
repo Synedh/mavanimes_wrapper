@@ -65,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'mavanimes_wrapper.middlewares.correlation_id',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

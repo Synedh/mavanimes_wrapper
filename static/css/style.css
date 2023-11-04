@@ -50,7 +50,7 @@ body {
 
     --universal-transition: all 0.2s;
 
-    --videos-width: min(calc((100vh - 140px) * (16 / 9)), 80vw);
+    --videos-width: min(calc((100vh - 150px) * (16 / 9)), 85vw);
     --videos-min-width: 320px;
 }
 
