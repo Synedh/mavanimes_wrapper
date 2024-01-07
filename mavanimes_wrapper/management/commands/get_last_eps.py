@@ -14,11 +14,14 @@ logger = logging.getLogger(__name__)
 URL = 'http://www.mavanimes.co/'
 
 
-def get_anime_images(anime: Anime, homepage: str) -> tuple[str]:
-    res = re.search(rf'<a href="{anime.episodes.last().mav_url}">.*?src="(.*?)".*?srcset=".*?(?:(https?://.*?)\s.*?)+"', homepage, re.DOTALL)
+def get_anime_images(episode: Episode, homepage: str) -> tuple[str]:
+    res = re.search(
+        rf'<a href="{episode.mav_url}">.*?src="(.*?)".*?srcset=".*?(?:(https?://.*?)\s.*?)+"',
+        homepage, re.DOTALL
+    )
     if res:
         return res.group(1), res.group(2)
-    logger.warning('No image found for episode %s', anime.episodes.last().name)
+    logger.warning('No image found for episode %s', episode.name)
     return None, None
 
 def parse_ep(ep_xml: xml.etree.ElementTree.Element) -> EpisodeDTO:
@@ -49,11 +52,11 @@ def save_ep(episode_dict: EpisodeDTO, homepage: str) -> Episode:
     episode_dict['anime'] = anime
 
     episode, new_episode = Episode.objects.update_or_create(
-        name=episode_dict['name'], anime=anime.id,
+        name=episode_dict['name'],
         defaults={**episode_dict}
     )
     if new_anime or new_season:
-        image, small_image = get_anime_images(anime, homepage)
+        image, small_image = get_anime_images(episode, homepage)
         anime_image = AnimeImage(
             image=image,
             small_image=small_image,
