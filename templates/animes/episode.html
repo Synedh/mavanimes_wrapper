@@ -131,6 +131,11 @@
             return;
         }
         const src = await response.text();
+        const rawVideo = await fetch(src);
+        if (!rawVideo.ok) {
+            console.error(rawVideo);
+            return;
+        }
         document.querySelector('#video_raw').children[0].src = src;
         tabs[tabs.length -1].classList.remove('hidden');
     }
@@ -145,7 +150,7 @@
     }
 
     window.reportIssue = (id) => {
-        const msg = prompt('Quel est l\'erreur rencontrée ?', 'Test');
+        const msg = prompt('Quelle est l\'erreur rencontrée ?', 'Test');
         console.log(msg);
     }
     {% endif %}
