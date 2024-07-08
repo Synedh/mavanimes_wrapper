@@ -2,12 +2,33 @@ from rest_framework import serializers
 
 from .models import Anime, Episode, VideoURL
 
-class VideoURLSerializer(serializers.HyperlinkedModelSerializer):
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
+
+    def __init__(self, *args, **kwargs):
+        # Instantiate the superclass normally
+        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
+
+        fields = self.context['request'].query_params.get('fields')
+        if fields:
+            fields = fields.split(',')
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
+class VideoURLSerializer(DynamicFieldsModelSerializer, serializers.HyperlinkedModelSerializer):
     class Meta:
         model = VideoURL
         fields = '__all__'
 
-class AnimeSerializer(serializers.HyperlinkedModelSerializer):
+
+class AnimeSerializer(DynamicFieldsModelSerializer, serializers.HyperlinkedModelSerializer):
     tags = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field='name'
     )
@@ -20,7 +41,8 @@ class AnimeSerializer(serializers.HyperlinkedModelSerializer):
             'mav_url'
         ]
 
-class EpisodeSerializer(serializers.HyperlinkedModelSerializer):
+
+class EpisodeSerializer(DynamicFieldsModelSerializer, serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Episode
         fields = [
